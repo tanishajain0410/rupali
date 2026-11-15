@@ -54,6 +54,31 @@ db.exec(`
     password_hash TEXT NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
   );
+
+  CREATE TABLE IF NOT EXISTS properties (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT NOT NULL,
+    tagline TEXT,
+    location TEXT DEFAULT 'Saphale West, Palghar',
+    starting_price TEXT DEFAULT '₹24.99 Lakhs*',
+    unit_types TEXT DEFAULT '1 & 2 BHK',
+    carpet_area TEXT DEFAULT '425 - 680 Sq.Ft.',
+    possession TEXT DEFAULT 'Dec 2026',
+    rera_number TEXT DEFAULT 'P99000054321',
+    image_url TEXT DEFAULT '/assets/images/vercel_hero_building.webp',
+    brochure_url TEXT DEFAULT '/om-sunkulan-brochure.pdf',
+    description TEXT,
+    featured INTEGER DEFAULT 1,
+    status TEXT DEFAULT 'Active',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  );
+
+  CREATE TABLE IF NOT EXISTS site_content (
+    section_key TEXT PRIMARY KEY,
+    content_json TEXT NOT NULL,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  );
 `);
 
 // Migration helper for existing databases (adds columns if missing)
@@ -76,6 +101,80 @@ function ensureColumns() {
   }
 }
 ensureColumns();
+
+// Seed initial property if table is empty
+const propCount = db.prepare('SELECT COUNT(*) as count FROM properties').get().count;
+if (propCount === 0) {
+  db.prepare(`
+    INSERT INTO properties (title, tagline, location, starting_price, unit_types, carpet_area, possession, rera_number, image_url, brochure_url, description, featured, status)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, 'Active')
+  `).run(
+    'OM SUNKULAN',
+    'Luxury 1 & 2 BHK Residences & Commercial Spaces',
+    'Village Makane, Saphale West, Dist. Palghar',
+    '₹24.99 Lakhs*',
+    '1 & 2 BHK Luxury Apartments',
+    '425 - 680 Sq.Ft.',
+    'Under Construction (Dec 2026)',
+    'P99000054321 / MahaRERA Registered',
+    '/assets/images/vercel_hero_building.webp',
+    '/om-sunkulan-brochure.pdf',
+    'Flagship residential and commercial project by Rupali Properties offering luxury lifestyle, grand entrance lobby, rooftop garden, fitness gym, branded lifts, and 24x7 security just minutes from Saphale Railway Station.'
+  );
+  console.log('Seeded flagship property: OM SUNKULAN');
+}
+
+// Seed default site_content if empty
+const defaultSections = {
+  hero: {
+    headline: 'Your Own Home. Your Own Happiness.',
+    subheadline: 'Luxury 1 & 2 BHK Residences at OM SUNKULAN, Saphale West. Thoughtfully designed around your life with premium amenities and seamless railway connectivity.',
+    startingPrice: '₹24.99 Lakhs* Onwards',
+    ctaPhone: '+91 95546 69474',
+    whatsappNumber: '919554669474',
+    announcementActive: true,
+    announcementText: '⚡ Special Launch Offer: Zero Stamp Duty & Free Modular Kitchen for Next 10 Bookings! Call +91 95546 69474'
+  },
+  contact: {
+    officeAddress: 'OM SUNKULAN Sales Office: Gala No. 106, 107 & 108, Krushna Plaza, Village Makane, Near Sai Samarth Super Market, Saphale West, Dist. & Tal. Palghar - 401102',
+    phone: '+91 95546 69474',
+    alternatePhone: '+91 98200 00000',
+    email: 'sales@rupaliproperties.com',
+    officeHours: '9:30 AM - 7:30 PM (Open All 7 Days)',
+    reraNumber: 'P99000054321 / MahaRERA Registered'
+  },
+  pricing: {
+    unit1_name: '1 BHK Luxury Apartment',
+    unit1_carpet: '425 - 460 Sq.Ft.',
+    unit1_price: '₹24.99 Lakhs*',
+    unit1_desc: 'Spacious Living Room, Master Bedroom with Balcony View, Premium Bathroom Fittings',
+    unit2_name: '2 BHK Premium Residence',
+    unit2_carpet: '610 - 680 Sq.Ft.',
+    unit2_price: '₹36.50 Lakhs*',
+    unit2_desc: '2 Master Bedrooms, Large Kitchen, 2 Balconies, Excellent Cross Ventilation',
+    unit3_name: 'Commercial Retail Shops',
+    unit3_carpet: '180 - 450 Sq.Ft.',
+    unit3_price: 'Price On Request',
+    unit3_desc: 'Prime Road Facing, High Footfall, Ideal for Supermarkets, Clinics, Salons & Retail'
+  },
+  amenities: [
+    { name: 'Branded High-Speed Lifts', desc: 'Auto Rescue Device (ARD) and backup power system', icon: 'fa-elevator' },
+    { name: '24x7 CCTV & Gated Security', desc: 'Round the clock security personnel and HD surveillance', icon: 'fa-shield-halved' },
+    { name: 'Lush Landscaped Garden', desc: 'Green landscaped sitting zones and morning walking track', icon: 'fa-tree' },
+    { name: 'Modern Fitness Center', desc: 'Fully equipped gymnasium for your healthy lifestyle', icon: 'fa-dumbbell' },
+    { name: 'Children Play Area', desc: 'Safe outdoor activity area with rubberized flooring and swings', icon: 'fa-child-reaching' },
+    { name: 'Generator Power Backup', desc: 'Uninterrupted power for common areas, elevators and pumps', icon: 'fa-bolt' },
+    { name: 'Designated Car Parking', desc: 'Covered and spacious podium parking layout', icon: 'fa-square-parking' },
+    { name: 'Senior Citizens Gazebo', desc: 'Peaceful seating pergola designed for elder residents', icon: 'fa-heart' }
+  ]
+};
+
+for (const [key, val] of Object.entries(defaultSections)) {
+  const exists = db.prepare('SELECT section_key FROM site_content WHERE section_key = ?').get(key);
+  if (!exists) {
+    db.prepare('INSERT INTO site_content (section_key, content_json) VALUES (?, ?)').run(key, JSON.stringify(val));
+  }
+}
 
 // Hash helper
 function hashPassword(pwd) {
@@ -153,6 +252,34 @@ app.post('/api/inquiries', (req, res) => {
   }
 });
 
+// Public: Get all active properties
+app.get('/api/properties', (req, res) => {
+  try {
+    const properties = db.prepare("SELECT * FROM properties WHERE status != 'Inactive' ORDER BY featured DESC, id DESC").all();
+    return res.json({ success: true, properties });
+  } catch (err) {
+    return res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// Public: Get all site content sections
+app.get('/api/site-content', (req, res) => {
+  try {
+    const rows = db.prepare('SELECT * FROM site_content').all();
+    const content = {};
+    for (const r of rows) {
+      try {
+        content[r.section_key] = JSON.parse(r.content_json);
+      } catch (e) {
+        content[r.section_key] = r.content_json;
+      }
+    }
+    return res.json({ success: true, content });
+  } catch (err) {
+    return res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 // Admin Login
 app.post('/api/admin/login', (req, res) => {
   const { username, password } = req.body;
@@ -176,7 +303,146 @@ app.post('/api/admin/login', (req, res) => {
   });
 });
 
-// ---------------- PROTECTED ADMIN ROUTES ---------------- //
+// ---------------- PROTECTED ADMIN ROUTES: PROPERTIES ---------------- //
+
+// List all properties for Admin
+app.get('/api/admin/properties', requireAdmin, (req, res) => {
+  try {
+    const properties = db.prepare('SELECT * FROM properties ORDER BY id DESC').all();
+    return res.json({ success: true, properties });
+  } catch (err) {
+    return res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// Add New Property
+app.post('/api/admin/properties', requireAdmin, (req, res) => {
+  try {
+    const {
+      title, tagline, location, starting_price, unit_types,
+      carpet_area, possession, rera_number, image_url, brochure_url,
+      description, featured = 1, status = 'Active'
+    } = req.body;
+
+    if (!title || !title.trim()) {
+      return res.status(400).json({ success: false, error: 'Property title is required.' });
+    }
+
+    const stmt = db.prepare(`
+      INSERT INTO properties (
+        title, tagline, location, starting_price, unit_types,
+        carpet_area, possession, rera_number, image_url, brochure_url,
+        description, featured, status
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `);
+
+    const info = stmt.run(
+      title.trim(),
+      (tagline || '').trim(),
+      (location || 'Saphale West, Palghar').trim(),
+      (starting_price || 'Price On Request').trim(),
+      (unit_types || '1 & 2 BHK').trim(),
+      (carpet_area || '').trim(),
+      (possession || 'Ready Possession').trim(),
+      (rera_number || '').trim(),
+      (image_url || '/assets/images/vercel_hero_building.webp').trim(),
+      (brochure_url || '/om-sunkulan-brochure.pdf').trim(),
+      (description || '').trim(),
+      featured ? 1 : 0,
+      status || 'Active'
+    );
+
+    return res.status(201).json({
+      success: true,
+      id: info.lastInsertRowid,
+      message: 'Property added successfully.'
+    });
+  } catch (err) {
+    return res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// Edit Property
+app.put('/api/admin/properties/:id', requireAdmin, (req, res) => {
+  try {
+    const { id } = req.params;
+    const {
+      title, tagline, location, starting_price, unit_types,
+      carpet_area, possession, rera_number, image_url, brochure_url,
+      description, featured, status
+    } = req.body;
+
+    const current = db.prepare('SELECT * FROM properties WHERE id = ?').get(id);
+    if (!current) {
+      return res.status(404).json({ success: false, error: 'Property not found.' });
+    }
+
+    db.prepare(`
+      UPDATE properties SET
+        title = ?, tagline = ?, location = ?, starting_price = ?, unit_types = ?,
+        carpet_area = ?, possession = ?, rera_number = ?, image_url = ?, brochure_url = ?,
+        description = ?, featured = ?, status = ?, updated_at = CURRENT_TIMESTAMP
+      WHERE id = ?
+    `).run(
+      title !== undefined ? title.trim() : current.title,
+      tagline !== undefined ? tagline.trim() : current.tagline,
+      location !== undefined ? location.trim() : current.location,
+      starting_price !== undefined ? starting_price.trim() : current.starting_price,
+      unit_types !== undefined ? unit_types.trim() : current.unit_types,
+      carpet_area !== undefined ? carpet_area.trim() : current.carpet_area,
+      possession !== undefined ? possession.trim() : current.possession,
+      rera_number !== undefined ? rera_number.trim() : current.rera_number,
+      image_url !== undefined ? image_url.trim() : current.image_url,
+      brochure_url !== undefined ? brochure_url.trim() : current.brochure_url,
+      description !== undefined ? description.trim() : current.description,
+      featured !== undefined ? (featured ? 1 : 0) : current.featured,
+      status !== undefined ? status : current.status,
+      id
+    );
+
+    return res.json({ success: true, message: 'Property updated successfully.' });
+  } catch (err) {
+    return res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// Remove / Delete Property
+app.delete('/api/admin/properties/:id', requireAdmin, (req, res) => {
+  try {
+    const { id } = req.params;
+    db.prepare('DELETE FROM properties WHERE id = ?').run(id);
+    return res.json({ success: true, message: 'Property removed successfully.' });
+  } catch (err) {
+    return res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// ---------------- PROTECTED ADMIN ROUTES: WEBSITE SECTIONS CONTENT ---------------- //
+
+// Save / Update Website Section Content
+app.post('/api/admin/site-content', requireAdmin, (req, res) => {
+  try {
+    const { section, data } = req.body;
+    if (!section || !data) {
+      return res.status(400).json({ success: false, error: 'Section key and data are required.' });
+    }
+
+    const jsonStr = JSON.stringify(data);
+    db.prepare(`
+      INSERT INTO site_content (section_key, content_json, updated_at)
+      VALUES (?, ?, CURRENT_TIMESTAMP)
+      ON CONFLICT(section_key) DO UPDATE SET
+        content_json = excluded.content_json,
+        updated_at = CURRENT_TIMESTAMP
+    `).run(section, jsonStr);
+
+    return res.json({ success: true, message: `Section '${section}' updated successfully.` });
+  } catch (err) {
+    return res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// ---------------- PROTECTED ADMIN ROUTES: LEADS & CRM ---------------- //
 
 // Change Password
 app.post('/api/admin/change-password', requireAdmin, (req, res) => {
@@ -201,7 +467,7 @@ app.post('/api/admin/change-password', requireAdmin, (req, res) => {
   }
 });
 
-// Stats (Enhanced with Follow-ups, Visits, Today counts)
+// Stats (Enhanced with Properties count)
 app.get('/api/admin/stats', requireAdmin, (req, res) => {
   try {
     const total = db.prepare('SELECT COUNT(*) as count FROM inquiries').get().count;
@@ -209,6 +475,8 @@ app.get('/api/admin/stats', requireAdmin, (req, res) => {
     const siteVisits = db.prepare('SELECT COUNT(*) as count FROM inquiries WHERE scheduleVisit = 1').get().count;
     const contacted = db.prepare("SELECT COUNT(*) as count FROM inquiries WHERE status = 'Contacted'").get().count;
     const closed = db.prepare("SELECT COUNT(*) as count FROM inquiries WHERE status = 'Closed'").get().count;
+
+    const propertiesCount = db.prepare('SELECT COUNT(*) as count FROM properties').get().count;
 
     // Today's Follow-ups count
     const today = new Date().toISOString().slice(0, 10);
@@ -225,7 +493,7 @@ app.get('/api/admin/stats', requireAdmin, (req, res) => {
 
     return res.json({
       success: true,
-      stats: { total, new: newCount, siteVisits, contacted, closed, todayFollowups, upcomingVisits }
+      stats: { total, new: newCount, siteVisits, contacted, closed, todayFollowups, upcomingVisits, propertiesCount }
     });
   } catch (err) {
     return res.status(500).json({ success: false, error: err.message });
@@ -435,9 +703,9 @@ app.get('/api/admin/export', requireAdmin, (req, res) => {
 
 // Health check
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', service: 'Rupali Properties Enquiry API v2', timestamp: new Date().toISOString() });
+  res.json({ status: 'ok', service: 'Rupali Properties API v3 with CMS', timestamp: new Date().toISOString() });
 });
 
 app.listen(PORT, '127.0.0.1', () => {
-  console.log(`Rupali Properties Enquiry Backend v2 running on http://127.0.0.1:${PORT}`);
+  console.log(`Rupali Properties API v3 with CMS running on http://127.0.0.1:${PORT}`);
 });

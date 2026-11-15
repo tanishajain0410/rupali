@@ -86,7 +86,6 @@
 
   <!-- ==================== 1. LOGIN VIEW ==================== -->
   <div id="loginSection" class="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
-    <!-- Ambient Lighting -->
     <div class="absolute top-1/4 -left-40 w-96 h-96 bg-gold-500/10 rounded-full blur-3xl pointer-events-none"></div>
     <div class="absolute bottom-1/4 -right-40 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>
 
@@ -101,7 +100,7 @@
 
       <form id="loginForm" onsubmit="handleLogin(event)" autocomplete="off" class="space-y-4">
         <div>
-          <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-1.5" for="loginUsername">
+          <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-1.5" for="adminUsername">
             Username
           </label>
           <div class="relative">
@@ -110,9 +109,10 @@
             </span>
             <input 
               type="text" 
-              id="adminUsername" name="admin_username_field" autocomplete="off" 
+              id="adminUsername" 
+              name="admin_username_field"
               required 
-              autocomplete="username"
+              autocomplete="off"
               class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-navy-900/90 border border-gold-500/30 text-white text-sm focus:outline-none focus:border-gold-400 transition"
               placeholder="Enter username"
             >
@@ -120,7 +120,7 @@
         </div>
 
         <div>
-          <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-1.5" for="loginPassword">
+          <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-1.5" for="adminPassword">
             Password
           </label>
           <div class="relative">
@@ -129,9 +129,10 @@
             </span>
             <input 
               type="password" 
-              id="adminPassword" name="admin_password_field" autocomplete="new-password" 
+              id="adminPassword" 
+              name="admin_password_field"
               required 
-              autocomplete="current-password"
+              autocomplete="new-password"
               class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-navy-900/90 border border-gold-500/30 text-white text-sm focus:outline-none focus:border-gold-400 transition"
               placeholder="Enter password"
             >
@@ -159,10 +160,10 @@
     </div>
   </div>
 
-  <!-- ==================== 2. MAIN DASHBOARD VIEW ==================== -->
+  <!-- ==================== 2. MAIN ADMIN DASHBOARD ==================== -->
   <div id="dashboardSection" class="hidden min-h-screen flex flex-col">
-    <!-- Navbar -->
-    <header class="glass-card border-b border-gold-500/25 sticky top-0 z-40 px-4 sm:px-8 py-3.5 flex items-center justify-between">
+    <!-- Top Navbar -->
+    <header class="glass-card border-b border-gold-500/25 sticky top-0 z-40 px-4 sm:px-8 py-3 flex flex-wrap items-center justify-between gap-3">
       <div class="flex items-center gap-3.5">
         <div class="w-10 h-10 rounded-xl bg-navy-900 border border-gold-500/40 flex items-center justify-center text-gold-400 shadow">
           <i class="fa-solid fa-building-shield"></i>
@@ -175,29 +176,42 @@
               Live Admin
             </span>
           </div>
-          <p class="text-[11px] text-gray-400">OM SUNKULAN Leads & Enquiries</p>
+          <p class="text-[11px] text-gray-400">OM SUNKULAN & Projects CMS</p>
         </div>
       </div>
 
+      <!-- Navigation Tabs (Leads, Properties, Website Content) -->
+      <div class="flex items-center gap-1.5 bg-navy-900/90 p-1 rounded-xl border border-gold-500/25">
+        <button 
+          id="navTabLeads" 
+          onclick="switchTab('leads')" 
+          class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 bg-gold-500 text-navy-950 shadow"
+        >
+          <i class="fa-solid fa-users text-xs"></i>
+          <span>Leads & Enquiries</span>
+        </button>
+
+        <button 
+          id="navTabProperties" 
+          onclick="switchTab('properties')" 
+          class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 text-gray-300 hover:text-white hover:bg-navy-800"
+        >
+          <i class="fa-solid fa-city text-xs text-gold-400"></i>
+          <span>Properties</span>
+        </button>
+
+        <button 
+          id="navTabContent" 
+          onclick="switchTab('content')" 
+          class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 text-gray-300 hover:text-white hover:bg-navy-800"
+        >
+          <i class="fa-solid fa-pen-to-square text-xs text-blue-400"></i>
+          <span>Website Sections</span>
+        </button>
+      </div>
+
+      <!-- Right Utility Actions -->
       <div class="flex items-center gap-2 sm:gap-3">
-        <!-- Add Manual Lead Button -->
-        <button 
-          onclick="openManualModal()" 
-          class="px-3 sm:px-3.5 py-1.5 rounded-lg bg-navy-800 hover:bg-navy-700 border border-gold-500/30 text-gold-300 text-xs font-semibold flex items-center gap-1.5 transition shadow"
-        >
-          <i class="fa-solid fa-plus text-[11px]"></i>
-          <span class="hidden sm:inline">Add Lead</span>
-        </button>
-
-        <!-- Export CSV Button -->
-        <button 
-          onclick="exportCSV()" 
-          class="px-3 sm:px-3.5 py-1.5 rounded-lg bg-navy-800 hover:bg-navy-700 border border-gold-500/30 text-gray-200 text-xs font-semibold flex items-center gap-1.5 transition shadow"
-        >
-          <i class="fa-solid fa-file-excel text-emerald-400 text-xs"></i>
-          <span class="hidden sm:inline">Export CSV</span>
-        </button>
-
         <!-- Change Password / Security Button -->
         <button 
           onclick="openPasswordModal()" 
@@ -208,7 +222,7 @@
           <span class="hidden md:inline">Password</span>
         </button>
 
-        <!-- Website Link -->
+        <!-- Live Website Link -->
         <a 
           href="/" 
           target="_blank" 
@@ -232,229 +246,390 @@
     <!-- Main Content Container -->
     <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 space-y-6">
 
-      <!-- Today's Follow-up Alert Banner (Feature 1) -->
-      <div id="followupAlertBanner" class="hidden glass-card border-gold-500/50 rounded-2xl p-4 sm:px-6 sm:py-3.5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-gradient-to-r from-gold-500/15 via-navy-850 to-navy-900">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-xl bg-gold-500/20 border border-gold-500/40 flex items-center justify-center text-gold-400">
-            <i class="fa-solid fa-bell text-lg animate-bounce"></i>
-          </div>
-          <div>
-            <h3 class="font-bold text-sm text-white flex items-center gap-2">
-              <span>Today's Follow-up Calls</span>
-              <span id="bannerFollowupCount" class="px-2 py-0.5 rounded-full text-xs font-bold bg-gold-500 text-navy-950">0</span>
-            </h3>
-            <p class="text-xs text-gray-300">You have leads scheduled for a call or check-in today.</p>
-          </div>
-        </div>
-        <button 
-          onclick="filterOnlyFollowups()" 
-          class="px-4 py-2 rounded-xl gold-gradient-bg text-navy-950 font-bold text-xs hover:opacity-95 shadow transition whitespace-nowrap"
-        >
-          View Pending Calls
-        </button>
-      </div>
-
-      <!-- Metrics Cards (Feature 6: Analytics) -->
-      <div class="grid grid-cols-2 lg:grid-cols-5 gap-3.5 sm:gap-4">
-        <!-- Total Leads -->
-        <div onclick="resetFilters()" class="glass-card glass-card-hover rounded-2xl p-4 sm:p-5 transition cursor-pointer">
-          <div class="flex items-center justify-between text-gray-400 mb-2">
-            <span class="text-xs font-semibold uppercase tracking-wider">Total Leads</span>
-            <div class="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center">
-              <i class="fa-solid fa-users text-xs"></i>
+      <!-- ==================== TAB 1: LEADS & ENQUIRIES ==================== -->
+      <div id="tabContentLeads" class="space-y-6">
+        <!-- Today's Follow-up Alert Banner -->
+        <div id="followupAlertBanner" class="hidden glass-card border-gold-500/50 rounded-2xl p-4 sm:px-6 sm:py-3.5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-gradient-to-r from-gold-500/15 via-navy-850 to-navy-900">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-gold-500/20 border border-gold-500/40 flex items-center justify-center text-gold-400">
+              <i class="fa-solid fa-bell text-lg animate-bounce"></i>
+            </div>
+            <div>
+              <h3 class="font-bold text-sm text-white flex items-center gap-2">
+                <span>Today's Follow-up Calls</span>
+                <span id="bannerFollowupCount" class="px-2 py-0.5 rounded-full text-xs font-bold bg-gold-500 text-navy-950">0</span>
+              </h3>
+              <p class="text-xs text-gray-300">You have leads scheduled for a call or check-in today.</p>
             </div>
           </div>
-          <div id="statTotal" class="text-2xl sm:text-3xl font-bold text-white tracking-tight">0</div>
-          <p class="text-[11px] text-gray-400 mt-1">All captured leads</p>
-        </div>
-
-        <!-- New Enquiries -->
-        <div onclick="filterByStatus('New')" class="glass-card glass-card-hover rounded-2xl p-4 sm:p-5 transition border-gold-500/40 cursor-pointer">
-          <div class="flex items-center justify-between text-gold-300 mb-2">
-            <span class="text-xs font-semibold uppercase tracking-wider">New Leads</span>
-            <div class="w-8 h-8 rounded-lg bg-gold-500/20 text-gold-400 flex items-center justify-center">
-              <i class="fa-solid fa-bolt text-xs"></i>
-            </div>
-          </div>
-          <div id="statNew" class="text-2xl sm:text-3xl font-bold gold-gradient-text tracking-tight">0</div>
-          <p class="text-[11px] text-gold-300/80 mt-1">Needs first call</p>
-        </div>
-
-        <!-- Today Follow-ups (Feature 1) -->
-        <div onclick="filterOnlyFollowups()" class="glass-card glass-card-hover rounded-2xl p-4 sm:p-5 transition cursor-pointer border-amber-500/40">
-          <div class="flex items-center justify-between text-amber-300 mb-2">
-            <span class="text-xs font-semibold uppercase tracking-wider">Due Followups</span>
-            <div class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-300 flex items-center justify-center">
-              <i class="fa-solid fa-phone-volume text-xs"></i>
-            </div>
-          </div>
-          <div id="statTodayFollowups" class="text-2xl sm:text-3xl font-bold text-amber-400 tracking-tight">0</div>
-          <p class="text-[11px] text-gray-400 mt-1">Scheduled for today</p>
-        </div>
-
-        <!-- Site Visits (Feature 5) -->
-        <div onclick="filterOnlyVisits()" class="glass-card glass-card-hover rounded-2xl p-4 sm:p-5 transition cursor-pointer border-emerald-500/30">
-          <div class="flex items-center justify-between text-emerald-400 mb-2">
-            <span class="text-xs font-semibold uppercase tracking-wider">Site Visits</span>
-            <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
-              <i class="fa-solid fa-car-side text-xs"></i>
-            </div>
-          </div>
-          <div id="statVisits" class="text-2xl sm:text-3xl font-bold text-emerald-400 tracking-tight">0</div>
-          <p class="text-[11px] text-gray-400 mt-1">Visit requested / booked</p>
-        </div>
-
-        <!-- Contacted / Progress -->
-        <div onclick="filterByStatus('Contacted')" class="glass-card glass-card-hover rounded-2xl p-4 sm:p-5 transition cursor-pointer">
-          <div class="flex items-center justify-between text-purple-400 mb-2">
-            <span class="text-xs font-semibold uppercase tracking-wider">Contacted</span>
-            <div class="w-8 h-8 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center">
-              <i class="fa-solid fa-headset text-xs"></i>
-            </div>
-          </div>
-          <div id="statContacted" class="text-2xl sm:text-3xl font-bold text-purple-400 tracking-tight">0</div>
-          <p class="text-[11px] text-gray-400 mt-1">In communication</p>
-        </div>
-      </div>
-
-      <!-- Filters & Search Toolbar (Features 5 & 6) -->
-      <div class="glass-card rounded-2xl p-4 flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3.5">
-        <!-- Search Box -->
-        <div class="relative flex-1">
-          <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
-            <i class="fa-solid fa-magnifying-glass text-xs"></i>
-          </span>
-          <input 
-            type="text" 
-            id="searchInput" 
-            oninput="handleSearch()"
-            placeholder="Search leads by name, phone, email, notes or requirements..." 
-            class="w-full pl-9 pr-4 py-2 rounded-xl bg-navy-900/90 border border-gold-500/25 text-xs sm:text-sm text-white focus:outline-none focus:border-gold-400 placeholder-gray-500 transition"
-          >
-        </div>
-
-        <!-- Filter Dropdowns -->
-        <div class="flex flex-wrap items-center gap-2 sm:gap-2.5">
-          <!-- Date Range Filter (Feature 6) -->
-          <div class="flex items-center gap-1.5 text-xs text-gray-300">
-            <i class="fa-regular fa-calendar text-gold-400 text-xs"></i>
-            <select 
-              id="dateRangeFilter" 
-              onchange="loadInquiries()" 
-              class="bg-navy-900 border border-gold-500/30 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-gold-400"
-            >
-              <option value="All">All Time</option>
-              <option value="Today">Today</option>
-              <option value="Yesterday">Yesterday</option>
-              <option value="This Week">Last 7 Days</option>
-              <option value="This Month">This Month</option>
-            </select>
-          </div>
-
-          <!-- Status Filter -->
-          <div class="flex items-center gap-1.5 text-xs text-gray-300">
-            <span>Status:</span>
-            <select 
-              id="statusFilter" 
-              onchange="loadInquiries()" 
-              class="bg-navy-900 border border-gold-500/30 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-gold-400"
-            >
-              <option value="All">All Statuses</option>
-              <option value="New">New</option>
-              <option value="Contacted">Contacted</option>
-              <option value="Site Visit Scheduled">Site Visit Scheduled</option>
-              <option value="Interested">Interested</option>
-              <option value="Closed">Closed</option>
-            </select>
-          </div>
-
-          <!-- Unit Filter -->
-          <div class="flex items-center gap-1.5 text-xs text-gray-300">
-            <span>Unit:</span>
-            <select 
-              id="unitFilter" 
-              onchange="loadInquiries()" 
-              class="bg-navy-900 border border-gold-500/30 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-gold-400"
-            >
-              <option value="All">All Units</option>
-              <option value="1 BHK">1 BHK</option>
-              <option value="2 BHK">2 BHK</option>
-              <option value="Commercial Shop">Commercial</option>
-              <option value="Penthouse">Penthouse</option>
-            </select>
-          </div>
-
-          <!-- Priority Filter -->
-          <div class="flex items-center gap-1.5 text-xs text-gray-300">
-            <span>Priority:</span>
-            <select 
-              id="priorityFilter" 
-              onchange="loadInquiries()" 
-              class="bg-navy-900 border border-gold-500/30 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-gold-400"
-            >
-              <option value="All">All Priority</option>
-              <option value="Hot">🔥 Hot</option>
-              <option value="Warm">☀️ Warm</option>
-              <option value="Cold">❄️ Cold</option>
-            </select>
-          </div>
-
-          <!-- Reset / Refresh Button -->
           <button 
-            onclick="resetFilters()" 
-            class="p-2 rounded-lg bg-navy-800 hover:bg-navy-700 border border-gold-500/25 text-gray-300 hover:text-gold-300 transition"
-            title="Reset Filters"
+            onclick="filterOnlyFollowups()" 
+            class="px-4 py-2 rounded-xl gold-gradient-bg text-navy-950 font-bold text-xs hover:opacity-95 shadow transition whitespace-nowrap"
           >
-            <i class="fa-solid fa-arrows-rotate text-xs"></i>
+            View Pending Calls
           </button>
         </div>
+
+        <!-- Metrics Cards -->
+        <div class="grid grid-cols-2 lg:grid-cols-5 gap-3.5 sm:gap-4">
+          <div onclick="resetFilters()" class="glass-card glass-card-hover rounded-2xl p-4 sm:p-5 transition cursor-pointer">
+            <div class="flex items-center justify-between text-gray-400 mb-2">
+              <span class="text-xs font-semibold uppercase tracking-wider">Total Leads</span>
+              <div class="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center">
+                <i class="fa-solid fa-users text-xs"></i>
+              </div>
+            </div>
+            <div id="statTotal" class="text-2xl sm:text-3xl font-bold text-white tracking-tight">0</div>
+            <p class="text-[11px] text-gray-400 mt-1">All captured leads</p>
+          </div>
+
+          <div onclick="filterByStatus('New')" class="glass-card glass-card-hover rounded-2xl p-4 sm:p-5 transition border-gold-500/40 cursor-pointer">
+            <div class="flex items-center justify-between text-gold-300 mb-2">
+              <span class="text-xs font-semibold uppercase tracking-wider">New Leads</span>
+              <div class="w-8 h-8 rounded-lg bg-gold-500/20 text-gold-400 flex items-center justify-center">
+                <i class="fa-solid fa-bolt text-xs"></i>
+              </div>
+            </div>
+            <div id="statNew" class="text-2xl sm:text-3xl font-bold gold-gradient-text tracking-tight">0</div>
+            <p class="text-[11px] text-gold-300/80 mt-1">Needs first call</p>
+          </div>
+
+          <div onclick="filterOnlyFollowups()" class="glass-card glass-card-hover rounded-2xl p-4 sm:p-5 transition cursor-pointer border-amber-500/40">
+            <div class="flex items-center justify-between text-amber-300 mb-2">
+              <span class="text-xs font-semibold uppercase tracking-wider">Due Followups</span>
+              <div class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-300 flex items-center justify-center">
+                <i class="fa-solid fa-phone-volume text-xs"></i>
+              </div>
+            </div>
+            <div id="statTodayFollowups" class="text-2xl sm:text-3xl font-bold text-amber-400 tracking-tight">0</div>
+            <p class="text-[11px] text-gray-400 mt-1">Scheduled for today</p>
+          </div>
+
+          <div onclick="filterOnlyVisits()" class="glass-card glass-card-hover rounded-2xl p-4 sm:p-5 transition cursor-pointer border-emerald-500/30">
+            <div class="flex items-center justify-between text-emerald-400 mb-2">
+              <span class="text-xs font-semibold uppercase tracking-wider">Site Visits</span>
+              <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
+                <i class="fa-solid fa-car-side text-xs"></i>
+              </div>
+            </div>
+            <div id="statVisits" class="text-2xl sm:text-3xl font-bold text-emerald-400 tracking-tight">0</div>
+            <p class="text-[11px] text-gray-400 mt-1">Visit requested / booked</p>
+          </div>
+
+          <div onclick="filterByStatus('Contacted')" class="glass-card glass-card-hover rounded-2xl p-4 sm:p-5 transition cursor-pointer">
+            <div class="flex items-center justify-between text-purple-400 mb-2">
+              <span class="text-xs font-semibold uppercase tracking-wider">Contacted</span>
+              <div class="w-8 h-8 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center">
+                <i class="fa-solid fa-headset text-xs"></i>
+              </div>
+            </div>
+            <div id="statContacted" class="text-2xl sm:text-3xl font-bold text-purple-400 tracking-tight">0</div>
+            <p class="text-[11px] text-gray-400 mt-1">In communication</p>
+          </div>
+        </div>
+
+        <!-- Filters & Search Toolbar -->
+        <div class="glass-card rounded-2xl p-4 flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3.5">
+          <div class="relative flex-1">
+            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
+              <i class="fa-solid fa-magnifying-glass text-xs"></i>
+            </span>
+            <input 
+              type="text" 
+              id="searchInput" 
+              oninput="handleSearch()"
+              placeholder="Search leads by name, phone, email, notes or requirements..." 
+              class="w-full pl-9 pr-4 py-2 rounded-xl bg-navy-900/90 border border-gold-500/25 text-xs sm:text-sm text-white focus:outline-none focus:border-gold-400 placeholder-gray-500 transition"
+            >
+          </div>
+
+          <div class="flex flex-wrap items-center gap-2 sm:gap-2.5">
+            <button onclick="openManualModal()" class="px-3 py-1.5 rounded-lg gold-gradient-bg text-navy-950 font-bold text-xs flex items-center gap-1.5 shadow">
+              <i class="fa-solid fa-plus text-xs"></i>
+              <span>Add Lead</span>
+            </button>
+
+            <button onclick="exportCSV()" class="px-3 py-1.5 rounded-lg bg-navy-800 hover:bg-navy-700 border border-gold-500/30 text-gray-200 text-xs font-semibold flex items-center gap-1.5 transition">
+              <i class="fa-solid fa-file-excel text-emerald-400 text-xs"></i>
+              <span>Export CSV</span>
+            </button>
+
+            <div class="flex items-center gap-1.5 text-xs text-gray-300">
+              <select id="dateRangeFilter" onchange="loadInquiries()" class="bg-navy-900 border border-gold-500/30 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-gold-400">
+                <option value="All">All Time</option>
+                <option value="Today">Today</option>
+                <option value="Yesterday">Yesterday</option>
+                <option value="This Week">Last 7 Days</option>
+                <option value="This Month">This Month</option>
+              </select>
+            </div>
+
+            <div class="flex items-center gap-1.5 text-xs text-gray-300">
+              <select id="statusFilter" onchange="loadInquiries()" class="bg-navy-900 border border-gold-500/30 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-gold-400">
+                <option value="All">All Statuses</option>
+                <option value="New">New</option>
+                <option value="Contacted">Contacted</option>
+                <option value="Site Visit Scheduled">Site Visit Scheduled</option>
+                <option value="Interested">Interested</option>
+                <option value="Closed">Closed</option>
+              </select>
+            </div>
+
+            <div class="flex items-center gap-1.5 text-xs text-gray-300">
+              <select id="priorityFilter" onchange="loadInquiries()" class="bg-navy-900 border border-gold-500/30 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-gold-400">
+                <option value="All">All Priority</option>
+                <option value="Hot">🔥 Hot</option>
+                <option value="Warm">☀️ Warm</option>
+                <option value="Cold">❄️ Cold</option>
+              </select>
+            </div>
+
+            <button onclick="resetFilters()" class="p-2 rounded-lg bg-navy-800 hover:bg-navy-700 border border-gold-500/25 text-gray-300 hover:text-gold-300 transition" title="Reset Filters">
+              <i class="fa-solid fa-arrows-rotate text-xs"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Inquiries Table Card -->
+        <div class="glass-card rounded-2xl overflow-hidden shadow-2xl border border-gold-500/30">
+          <div class="p-4 sm:px-6 sm:py-4 border-b border-gold-500/20 flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <h2 class="font-bold text-sm text-white flex items-center gap-2">
+                <span>Leads & Enquiries</span>
+                <span id="recordCount" class="text-xs px-2 py-0.5 rounded-full bg-navy-900 text-gold-400 border border-gold-500/30 font-semibold">0</span>
+              </h2>
+              <div id="activeFilterBadge" class="hidden text-[11px] px-2.5 py-0.5 rounded-full bg-gold-500/20 text-gold-300 border border-gold-500/40 font-medium"></div>
+            </div>
+            <div class="flex items-center gap-2 text-[11px] text-gray-400">
+              <span class="inline-flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-red-400"></span> Hot</span>
+              <span class="inline-flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-amber-400"></span> Warm</span>
+              <span class="inline-flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-blue-400"></span> Cold</span>
+            </div>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-navy-900/85 text-gray-400 uppercase tracking-wider text-[10px] border-b border-gold-500/20">
+                <tr>
+                  <th class="py-3 px-4">Customer & Contact</th>
+                  <th class="py-3 px-4">Unit & Priority</th>
+                  <th class="py-3 px-4">Next Follow-up</th>
+                  <th class="py-3 px-4">Site Visit</th>
+                  <th class="py-3 px-4">Status</th>
+                  <th class="py-3 px-4">Quick WhatsApp</th>
+                  <th class="py-3 px-4 text-center">Activity Log</th>
+                  <th class="py-3 px-4 text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="inquiriesTableBody" class="divide-y divide-navy-800">
+                <!-- Injected via JS -->
+              </tbody>
+            </table>
+          </div>
+
+          <div id="emptyState" class="hidden py-16 text-center">
+            <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-navy-900 text-gold-400/50 mb-3 border border-gold-500/20">
+              <i class="fa-solid fa-inbox text-xl"></i>
+            </div>
+            <p class="text-sm font-semibold text-gray-300">No matching enquiries found</p>
+            <p class="text-xs text-gray-500 mt-1">Try resetting your search filters or check back later.</p>
+            <button onclick="resetFilters()" class="mt-3 px-3 py-1.5 rounded-lg bg-navy-800 text-xs text-gold-400 border border-gold-500/30">Reset Filters</button>
+          </div>
+        </div>
       </div>
 
-      <!-- Inquiries Table Card -->
-      <div class="glass-card rounded-2xl overflow-hidden shadow-2xl border border-gold-500/30">
-        <div class="p-4 sm:px-6 sm:py-4 border-b border-gold-500/20 flex flex-wrap items-center justify-between gap-3">
-          <div class="flex items-center gap-3">
-            <h2 class="font-bold text-sm text-white flex items-center gap-2">
-              <span>Leads & Enquiries</span>
-              <span id="recordCount" class="text-xs px-2 py-0.5 rounded-full bg-navy-900 text-gold-400 border border-gold-500/30 font-semibold">0</span>
+      <!-- ==================== TAB 2: PROPERTIES MANAGER ==================== -->
+      <div id="tabContentProperties" class="hidden space-y-6">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 glass-card p-4 sm:p-6 rounded-2xl">
+          <div>
+            <h2 class="text-lg font-bold text-white flex items-center gap-2">
+              <i class="fa-solid fa-city text-gold-400"></i>
+              <span>Properties & Projects Portfolio</span>
             </h2>
-            <div id="activeFilterBadge" class="hidden text-[11px] px-2.5 py-0.5 rounded-full bg-gold-500/20 text-gold-300 border border-gold-500/40 font-medium"></div>
+            <p class="text-xs text-gray-300 mt-1">Add, edit, manage and remove residential & commercial properties shown on the website.</p>
           </div>
-          <div class="flex items-center gap-2 text-[11px] text-gray-400">
-            <span class="inline-flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-red-400"></span> Hot</span>
-            <span class="inline-flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-amber-400"></span> Warm</span>
-            <span class="inline-flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-blue-400"></span> Cold</span>
-          </div>
+          <button 
+            onclick="openPropertyModal()" 
+            class="px-4 py-2 rounded-xl gold-gradient-bg text-navy-950 font-bold text-xs hover:opacity-95 shadow transition flex items-center gap-2 whitespace-nowrap"
+          >
+            <i class="fa-solid fa-plus text-xs"></i>
+            <span>Add New Property</span>
+          </button>
         </div>
 
-        <div class="overflow-x-auto">
-          <table class="w-full text-left text-xs">
-            <thead class="bg-navy-900/85 text-gray-400 uppercase tracking-wider text-[10px] border-b border-gold-500/20">
-              <tr>
-                <th class="py-3 px-4">Customer & Contact</th>
-                <th class="py-3 px-4">Unit & Priority</th>
-                <th class="py-3 px-4">Next Follow-up</th>
-                <th class="py-3 px-4">Site Visit</th>
-                <th class="py-3 px-4">Status</th>
-                <th class="py-3 px-4">Quick WhatsApp</th>
-                <th class="py-3 px-4 text-center">Activity Log</th>
-                <th class="py-3 px-4 text-center">Actions</th>
-              </tr>
-            </thead>
-            <tbody id="inquiriesTableBody" class="divide-y divide-navy-800">
-              <!-- Dynamically populated via JS -->
-            </tbody>
-          </table>
+        <!-- Properties Grid -->
+        <div id="propertiesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <!-- Dynamically populated via loadProperties() -->
+        </div>
+      </div>
+
+      <!-- ==================== TAB 3: WEBSITE SECTIONS CONTENT ==================== -->
+      <div id="tabContentContent" class="hidden space-y-6">
+        <div class="glass-card p-4 sm:p-6 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-lg font-bold text-white flex items-center gap-2">
+              <i class="fa-solid fa-pen-to-square text-blue-400"></i>
+              <span>Website Important Sections Editor</span>
+            </h2>
+            <p class="text-xs text-gray-300 mt-1">Edit live content across the website (Headlines, Announcements, Pricing, Amenities, and Contact Details).</p>
+          </div>
+          <span class="text-xs px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-semibold flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            Real-time Live Sync
+          </span>
         </div>
 
-        <!-- Empty State -->
-        <div id="emptyState" class="hidden py-16 text-center">
-          <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-navy-900 text-gold-400/50 mb-3 border border-gold-500/20">
-            <i class="fa-solid fa-inbox text-xl"></i>
+        <!-- Content Editor Accordions / Cards -->
+        <div class="space-y-5">
+          
+          <!-- Section 1: Top Announcement Bar -->
+          <div class="glass-card rounded-2xl p-5 border border-gold-500/30">
+            <div class="flex items-center justify-between pb-3 border-b border-gold-500/20 mb-4">
+              <div class="flex items-center gap-2.5">
+                <i class="fa-solid fa-bullhorn text-gold-400 text-base"></i>
+                <h3 class="font-bold text-sm text-white">Top Announcement & Festive Offer Bar</h3>
+              </div>
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" id="scAnnouncementActive" class="rounded bg-navy-900 border-gold-500 text-gold-500 focus:ring-0">
+                <span class="text-xs font-semibold text-gold-300">Show on Website</span>
+              </label>
+            </div>
+            <div class="space-y-3">
+              <div>
+                <label class="block text-xs font-semibold text-gray-300 mb-1">Announcement Marquee Text</label>
+                <input type="text" id="scAnnouncementText" class="w-full px-3.5 py-2 rounded-xl bg-navy-900 border border-gold-500/30 text-xs text-white focus:outline-none focus:border-gold-400" placeholder="e.g. ⚡ Special Launch Offer: Zero Stamp Duty & Free Modular Kitchen for Next 10 Bookings! Call +91 95546 69474">
+              </div>
+              <div class="flex justify-end">
+                <button onclick="saveHeroSection()" class="px-4 py-2 rounded-lg gold-gradient-bg text-navy-950 font-bold text-xs hover:opacity-95 shadow">Save Announcement</button>
+              </div>
+            </div>
           </div>
-          <p class="text-sm font-semibold text-gray-300">No matching enquiries found</p>
-          <p class="text-xs text-gray-500 mt-1">Try resetting your search filters or check back later.</p>
-          <button onclick="resetFilters()" class="mt-3 px-3 py-1.5 rounded-lg bg-navy-800 text-xs text-gold-400 border border-gold-500/30">Reset Filters</button>
+
+          <!-- Section 2: Hero Headline & CTA -->
+          <div class="glass-card rounded-2xl p-5 border border-gold-500/30">
+            <div class="flex items-center gap-2.5 pb-3 border-b border-gold-500/20 mb-4">
+              <i class="fa-solid fa-star text-gold-400 text-base"></i>
+              <h3 class="font-bold text-sm text-white">Hero Header Section</h3>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="md:col-span-2">
+                <label class="block text-xs font-semibold text-gray-300 mb-1">Main Hero Headline</label>
+                <input type="text" id="scHeroHeadline" class="w-full px-3.5 py-2 rounded-xl bg-navy-900 border border-gold-500/30 text-xs text-white focus:outline-none focus:border-gold-400">
+              </div>
+              <div class="md:col-span-2">
+                <label class="block text-xs font-semibold text-gray-300 mb-1">Sub-headline / Tagline Description</label>
+                <textarea id="scHeroSubheadline" rows="2" class="w-full px-3.5 py-2 rounded-xl bg-navy-900 border border-gold-500/30 text-xs text-white focus:outline-none focus:border-gold-400"></textarea>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-gray-300 mb-1">Starting Price Tag</label>
+                <input type="text" id="scHeroStartingPrice" class="w-full px-3.5 py-2 rounded-xl bg-navy-900 border border-gold-500/30 text-xs text-white focus:outline-none focus:border-gold-400" placeholder="e.g. ₹24.99 Lakhs* Onwards">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-gray-300 mb-1">Call-to-Action Phone Number</label>
+                <input type="text" id="scHeroCtaPhone" class="w-full px-3.5 py-2 rounded-xl bg-navy-900 border border-gold-500/30 text-xs text-white focus:outline-none focus:border-gold-400" placeholder="+91 95546 69474">
+              </div>
+            </div>
+            <div class="mt-4 flex justify-end">
+              <button onclick="saveHeroSection()" class="px-4 py-2 rounded-lg gold-gradient-bg text-navy-950 font-bold text-xs hover:opacity-95 shadow">Save Hero Section</button>
+            </div>
+          </div>
+
+          <!-- Section 3: Pricing & Unit Plans -->
+          <div class="glass-card rounded-2xl p-5 border border-gold-500/30">
+            <div class="flex items-center gap-2.5 pb-3 border-b border-gold-500/20 mb-4">
+              <i class="fa-solid fa-tags text-gold-400 text-base"></i>
+              <h3 class="font-bold text-sm text-white">Pricing & Unit Configurations</h3>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <!-- 1 BHK -->
+              <div class="p-3.5 rounded-xl bg-navy-900/90 border border-gold-500/25 space-y-2.5">
+                <div class="font-bold text-xs text-gold-300 uppercase">Unit 1: 1 BHK</div>
+                <input type="text" id="scP1Name" placeholder="Name" class="w-full px-2.5 py-1.5 rounded-lg bg-navy-950 border border-gray-700 text-xs text-white">
+                <input type="text" id="scP1Carpet" placeholder="Carpet Area" class="w-full px-2.5 py-1.5 rounded-lg bg-navy-950 border border-gray-700 text-xs text-white">
+                <input type="text" id="scP1Price" placeholder="Starting Price" class="w-full px-2.5 py-1.5 rounded-lg bg-navy-950 border border-gray-700 text-xs text-white">
+                <textarea id="scP1Desc" rows="2" placeholder="Key highlights" class="w-full px-2.5 py-1.5 rounded-lg bg-navy-950 border border-gray-700 text-xs text-white"></textarea>
+              </div>
+
+              <!-- 2 BHK -->
+              <div class="p-3.5 rounded-xl bg-navy-900/90 border border-gold-500/25 space-y-2.5">
+                <div class="font-bold text-xs text-gold-300 uppercase">Unit 2: 2 BHK</div>
+                <input type="text" id="scP2Name" placeholder="Name" class="w-full px-2.5 py-1.5 rounded-lg bg-navy-950 border border-gray-700 text-xs text-white">
+                <input type="text" id="scP2Carpet" placeholder="Carpet Area" class="w-full px-2.5 py-1.5 rounded-lg bg-navy-950 border border-gray-700 text-xs text-white">
+                <input type="text" id="scP2Price" placeholder="Starting Price" class="w-full px-2.5 py-1.5 rounded-lg bg-navy-950 border border-gray-700 text-xs text-white">
+                <textarea id="scP2Desc" rows="2" placeholder="Key highlights" class="w-full px-2.5 py-1.5 rounded-lg bg-navy-950 border border-gray-700 text-xs text-white"></textarea>
+              </div>
+
+              <!-- Commercial -->
+              <div class="p-3.5 rounded-xl bg-navy-900/90 border border-gold-500/25 space-y-2.5">
+                <div class="font-bold text-xs text-gold-300 uppercase">Unit 3: Commercial</div>
+                <input type="text" id="scP3Name" placeholder="Name" class="w-full px-2.5 py-1.5 rounded-lg bg-navy-950 border border-gray-700 text-xs text-white">
+                <input type="text" id="scP3Carpet" placeholder="Carpet Area" class="w-full px-2.5 py-1.5 rounded-lg bg-navy-950 border border-gray-700 text-xs text-white">
+                <input type="text" id="scP3Price" placeholder="Starting Price" class="w-full px-2.5 py-1.5 rounded-lg bg-navy-950 border border-gray-700 text-xs text-white">
+                <textarea id="scP3Desc" rows="2" placeholder="Key highlights" class="w-full px-2.5 py-1.5 rounded-lg bg-navy-950 border border-gray-700 text-xs text-white"></textarea>
+              </div>
+            </div>
+            <div class="mt-4 flex justify-end">
+              <button onclick="savePricingSection()" class="px-4 py-2 rounded-lg gold-gradient-bg text-navy-950 font-bold text-xs hover:opacity-95 shadow">Save Pricing Details</button>
+            </div>
+          </div>
+
+          <!-- Section 4: Amenities Manager -->
+          <div class="glass-card rounded-2xl p-5 border border-gold-500/30">
+            <div class="flex items-center justify-between pb-3 border-b border-gold-500/20 mb-4">
+              <div class="flex items-center gap-2.5">
+                <i class="fa-solid fa-dumbbell text-gold-400 text-base"></i>
+                <h3 class="font-bold text-sm text-white">Project Amenities List</h3>
+              </div>
+              <button onclick="addAmenityItem()" class="px-3 py-1.5 rounded-lg bg-navy-800 hover:bg-navy-700 border border-gold-500/30 text-gold-300 text-xs font-semibold flex items-center gap-1.5">
+                <i class="fa-solid fa-plus text-xs"></i>
+                <span>Add Amenity</span>
+              </button>
+            </div>
+            <div id="amenitiesEditorList" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <!-- Dynamically populated -->
+            </div>
+            <div class="mt-4 flex justify-end">
+              <button onclick="saveAmenitiesSection()" class="px-4 py-2 rounded-lg gold-gradient-bg text-navy-950 font-bold text-xs hover:opacity-95 shadow">Save Amenities</button>
+            </div>
+          </div>
+
+          <!-- Section 5: Office & Contact Information -->
+          <div class="glass-card rounded-2xl p-5 border border-gold-500/30">
+            <div class="flex items-center gap-2.5 pb-3 border-b border-gold-500/20 mb-4">
+              <i class="fa-solid fa-phone-volume text-gold-400 text-base"></i>
+              <h3 class="font-bold text-sm text-white">Official Contact & Office Information</h3>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="md:col-span-2">
+                <label class="block text-xs font-semibold text-gray-300 mb-1">Official Sales Office Address</label>
+                <textarea id="scContactAddress" rows="2" class="w-full px-3.5 py-2 rounded-xl bg-navy-900 border border-gold-500/30 text-xs text-white focus:outline-none focus:border-gold-400"></textarea>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-gray-300 mb-1">Primary Phone Number</label>
+                <input type="text" id="scContactPhone" class="w-full px-3.5 py-2 rounded-xl bg-navy-900 border border-gold-500/30 text-xs text-white focus:outline-none focus:border-gold-400">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-gray-300 mb-1">Alternate Phone / Mobile</label>
+                <input type="text" id="scContactAltPhone" class="w-full px-3.5 py-2 rounded-xl bg-navy-900 border border-gold-500/30 text-xs text-white focus:outline-none focus:border-gold-400">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-gray-300 mb-1">Official Email Address</label>
+                <input type="email" id="scContactEmail" class="w-full px-3.5 py-2 rounded-xl bg-navy-900 border border-gold-500/30 text-xs text-white focus:outline-none focus:border-gold-400">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-gray-300 mb-1">Office Working Hours</label>
+                <input type="text" id="scContactHours" class="w-full px-3.5 py-2 rounded-xl bg-navy-900 border border-gold-500/30 text-xs text-white focus:outline-none focus:border-gold-400">
+              </div>
+              <div class="md:col-span-2">
+                <label class="block text-xs font-semibold text-gray-300 mb-1">MahaRERA Registration Number</label>
+                <input type="text" id="scContactRera" class="w-full px-3.5 py-2 rounded-xl bg-navy-900 border border-gold-500/30 text-xs text-white focus:outline-none focus:border-gold-400">
+              </div>
+            </div>
+            <div class="mt-4 flex justify-end">
+              <button onclick="saveContactSection()" class="px-4 py-2 rounded-lg gold-gradient-bg text-navy-950 font-bold text-xs hover:opacity-95 shadow">Save Contact Information</button>
+            </div>
+          </div>
+
         </div>
       </div>
 
@@ -463,7 +638,103 @@
 
   <!-- ==================== 3. MODALS ==================== -->
 
-  <!-- Modal A: Quick WhatsApp Templates (Feature 3) -->
+  <!-- Modal 1: Property Add / Edit Modal -->
+  <div id="propertyModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm overflow-y-auto">
+    <div class="glass-card max-w-2xl w-full rounded-2xl p-6 border border-gold-500/40 shadow-2xl relative my-8">
+      <div class="flex items-center justify-between pb-3 border-b border-gold-500/20 mb-4">
+        <h3 id="propModalTitle" class="font-bold text-base text-white flex items-center gap-2">
+          <i class="fa-solid fa-city text-gold-400"></i>
+          <span>Add New Property / Project</span>
+        </h3>
+        <button onclick="closePropertyModal()" class="text-gray-400 hover:text-white transition">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <form onsubmit="handlePropertySubmit(event)" class="space-y-3.5">
+        <input type="hidden" id="pId">
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-[11px] font-semibold text-gray-300 mb-1">Property / Project Name *</label>
+            <input type="text" id="pTitle" required placeholder="e.g. OM SUNKULAN Phase 2" class="w-full px-3 py-2 rounded-lg bg-navy-900 border border-gold-500/30 text-xs text-white focus:outline-none focus:border-gold-400">
+          </div>
+          <div>
+            <label class="block text-[11px] font-semibold text-gray-300 mb-1">Tagline / Subtitle</label>
+            <input type="text" id="pTagline" placeholder="e.g. Luxury 1 & 2 BHK Residences" class="w-full px-3 py-2 rounded-lg bg-navy-900 border border-gold-500/30 text-xs text-white focus:outline-none focus:border-gold-400">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div>
+            <label class="block text-[11px] font-semibold text-gray-300 mb-1">Location *</label>
+            <input type="text" id="pLocation" required placeholder="e.g. Saphale West, Palghar" class="w-full px-3 py-2 rounded-lg bg-navy-900 border border-gold-500/30 text-xs text-white focus:outline-none focus:border-gold-400">
+          </div>
+          <div>
+            <label class="block text-[11px] font-semibold text-gray-300 mb-1">Starting Price *</label>
+            <input type="text" id="pPrice" required placeholder="e.g. ₹24.99 Lakhs*" class="w-full px-3 py-2 rounded-lg bg-navy-900 border border-gold-500/30 text-xs text-white focus:outline-none focus:border-gold-400">
+          </div>
+          <div>
+            <label class="block text-[11px] font-semibold text-gray-300 mb-1">Unit Types *</label>
+            <input type="text" id="pUnits" required placeholder="e.g. 1 & 2 BHK" class="w-full px-3 py-2 rounded-lg bg-navy-900 border border-gold-500/30 text-xs text-white focus:outline-none focus:border-gold-400">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div>
+            <label class="block text-[11px] font-semibold text-gray-300 mb-1">Carpet Area</label>
+            <input type="text" id="pCarpet" placeholder="e.g. 425 - 680 Sq.Ft." class="w-full px-3 py-2 rounded-lg bg-navy-900 border border-gold-500/30 text-xs text-white focus:outline-none focus:border-gold-400">
+          </div>
+          <div>
+            <label class="block text-[11px] font-semibold text-gray-300 mb-1">Possession Date</label>
+            <input type="text" id="pPossession" placeholder="e.g. Dec 2026 / Ready" class="w-full px-3 py-2 rounded-lg bg-navy-900 border border-gold-500/30 text-xs text-white focus:outline-none focus:border-gold-400">
+          </div>
+          <div>
+            <label class="block text-[11px] font-semibold text-gray-300 mb-1">Status</label>
+            <select id="pStatus" class="w-full px-3 py-2 rounded-lg bg-navy-900 border border-gold-500/30 text-xs text-white focus:outline-none focus:border-gold-400">
+              <option value="Active">Active / Available</option>
+              <option value="Upcoming">Upcoming Launch</option>
+              <option value="Sold Out">Sold Out</option>
+              <option value="Inactive">Inactive / Hidden</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-[11px] font-semibold text-gray-300 mb-1">Banner Image URL</label>
+            <input type="text" id="pImage" placeholder="/assets/images/vercel_hero_building.webp" class="w-full px-3 py-2 rounded-lg bg-navy-900 border border-gold-500/30 text-xs text-white focus:outline-none focus:border-gold-400">
+          </div>
+          <div>
+            <label class="block text-[11px] font-semibold text-gray-300 mb-1">Brochure PDF Link</label>
+            <input type="text" id="pBrochure" placeholder="/om-sunkulan-brochure.pdf" class="w-full px-3 py-2 rounded-lg bg-navy-900 border border-gold-500/30 text-xs text-white focus:outline-none focus:border-gold-400">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-[11px] font-semibold text-gray-300 mb-1">RERA Number</label>
+          <input type="text" id="pRera" placeholder="e.g. P99000054321 / MahaRERA" class="w-full px-3 py-2 rounded-lg bg-navy-900 border border-gold-500/30 text-xs text-white focus:outline-none focus:border-gold-400">
+        </div>
+
+        <div>
+          <label class="block text-[11px] font-semibold text-gray-300 mb-1">Property Description & Highlights</label>
+          <textarea id="pDesc" rows="3" placeholder="Describe the project, architecture, location advantages..." class="w-full px-3 py-2 rounded-lg bg-navy-900 border border-gold-500/30 text-xs text-white focus:outline-none focus:border-gold-400"></textarea>
+        </div>
+
+        <div class="flex items-center gap-2 pt-1">
+          <input type="checkbox" id="pFeatured" checked class="rounded bg-navy-900 border-gold-500 text-gold-500 focus:ring-0">
+          <label for="pFeatured" class="text-xs text-gray-300 font-semibold">Featured on Homepage</label>
+        </div>
+
+        <div class="pt-3 flex justify-end gap-2.5">
+          <button type="button" onclick="closePropertyModal()" class="px-4 py-2 rounded-lg bg-navy-800 text-xs text-gray-300 hover:text-white">Cancel</button>
+          <button type="submit" class="px-4 py-2 rounded-lg gold-gradient-bg text-navy-950 font-bold text-xs hover:opacity-95 shadow">Save Property</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal 2: Quick WhatsApp Templates -->
   <div id="waTemplateModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
     <div class="glass-card max-w-md w-full rounded-2xl p-6 border border-emerald-500/40 shadow-2xl relative">
       <div class="flex items-center justify-between pb-3 border-b border-gold-500/20 mb-4">
@@ -481,74 +752,46 @@
       </div>
 
       <div class="space-y-2.5">
-        <!-- Template 1: Brochure & Pricing -->
-        <button 
-          onclick="sendTemplate('brochure')" 
-          class="w-full text-left p-3 rounded-xl bg-navy-900 hover:bg-navy-800 border border-gold-500/30 transition group flex items-start gap-3"
-        >
-          <div class="p-2 rounded-lg bg-emerald-500/10 text-emerald-400 group-hover:scale-105 transition">
-            <i class="fa-solid fa-file-pdf text-sm"></i>
-          </div>
+        <button onclick="sendTemplate('brochure')" class="w-full text-left p-3 rounded-xl bg-navy-900 hover:bg-navy-800 border border-gold-500/30 transition group flex items-start gap-3">
+          <div class="p-2 rounded-lg bg-emerald-500/10 text-emerald-400 group-hover:scale-105 transition"><i class="fa-solid fa-file-pdf text-sm"></i></div>
           <div>
             <div class="text-xs font-bold text-white group-hover:text-gold-300 transition">1. Send Brochure & Price Details</div>
             <div class="text-[11px] text-gray-400 mt-0.5">Sends PDF brochure link + starting price info for 1 & 2 BHK.</div>
           </div>
         </button>
 
-        <!-- Template 2: Site Location & Maps -->
-        <button 
-          onclick="sendTemplate('location')" 
-          class="w-full text-left p-3 rounded-xl bg-navy-900 hover:bg-navy-800 border border-gold-500/30 transition group flex items-start gap-3"
-        >
-          <div class="p-2 rounded-lg bg-blue-500/10 text-blue-400 group-hover:scale-105 transition">
-            <i class="fa-solid fa-location-dot text-sm"></i>
-          </div>
+        <button onclick="sendTemplate('location')" class="w-full text-left p-3 rounded-xl bg-navy-900 hover:bg-navy-800 border border-gold-500/30 transition group flex items-start gap-3">
+          <div class="p-2 rounded-lg bg-blue-500/10 text-blue-400 group-hover:scale-105 transition"><i class="fa-solid fa-location-dot text-sm"></i></div>
           <div>
             <div class="text-xs font-bold text-white group-hover:text-gold-300 transition">2. Send Site Location & Maps</div>
             <div class="text-[11px] text-gray-400 mt-0.5">Sends Saphale West sales office address + Google Maps link.</div>
           </div>
         </button>
 
-        <!-- Template 3: Site Visit Confirmation -->
-        <button 
-          onclick="sendTemplate('visit')" 
-          class="w-full text-left p-3 rounded-xl bg-navy-900 hover:bg-navy-800 border border-gold-500/30 transition group flex items-start gap-3"
-        >
-          <div class="p-2 rounded-lg bg-amber-500/10 text-amber-400 group-hover:scale-105 transition">
-            <i class="fa-solid fa-calendar-check text-sm"></i>
-          </div>
+        <button onclick="sendTemplate('visit')" class="w-full text-left p-3 rounded-xl bg-navy-900 hover:bg-navy-800 border border-gold-500/30 transition group flex items-start gap-3">
+          <div class="p-2 rounded-lg bg-amber-500/10 text-amber-400 group-hover:scale-105 transition"><i class="fa-solid fa-calendar-check text-sm"></i></div>
           <div>
             <div class="text-xs font-bold text-white group-hover:text-gold-300 transition">3. Site Visit Confirmation</div>
             <div class="text-[11px] text-gray-400 mt-0.5">Confirms date, sales executive contact and station pickup.</div>
           </div>
         </button>
 
-        <!-- Template 4: Friendly Follow-up Greeting -->
-        <button 
-          onclick="sendTemplate('greeting')" 
-          class="w-full text-left p-3 rounded-xl bg-navy-900 hover:bg-navy-800 border border-gold-500/30 transition group flex items-start gap-3"
-        >
-          <div class="p-2 rounded-lg bg-purple-500/10 text-purple-400 group-hover:scale-105 transition">
-            <i class="fa-solid fa-hand-peace text-sm"></i>
-          </div>
+        <button onclick="sendTemplate('greeting')" class="w-full text-left p-3 rounded-xl bg-navy-900 hover:bg-navy-800 border border-gold-500/30 transition group flex items-start gap-3">
+          <div class="p-2 rounded-lg bg-purple-500/10 text-purple-400 group-hover:scale-105 transition"><i class="fa-solid fa-hand-peace text-sm"></i></div>
           <div>
             <div class="text-xs font-bold text-white group-hover:text-gold-300 transition">4. Follow-up Greeting</div>
             <div class="text-[11px] text-gray-400 mt-0.5">Polite check-in asking if they reviewed details or have questions.</div>
           </div>
         </button>
 
-        <!-- Template 5: Direct Blank Chat -->
-        <button 
-          onclick="sendTemplate('blank')" 
-          class="w-full text-left p-2.5 rounded-xl bg-navy-950 hover:bg-navy-900 border border-gray-700 text-center text-xs text-gray-300 hover:text-white transition"
-        >
+        <button onclick="sendTemplate('blank')" class="w-full text-left p-2.5 rounded-xl bg-navy-950 hover:bg-navy-900 border border-gray-700 text-center text-xs text-gray-300 hover:text-white transition">
           Open Blank WhatsApp Chat
         </button>
       </div>
     </div>
   </div>
 
-  <!-- Modal B: Lead Activity Timeline & Call Notes (Feature 4) -->
+  <!-- Modal 3: Lead Activity Timeline -->
   <div id="activityModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm">
     <div class="glass-card max-w-lg w-full rounded-2xl p-6 border border-gold-500/40 shadow-2xl flex flex-col max-h-[85vh]">
       <div class="flex items-center justify-between pb-3 border-b border-gold-500/20 mb-3">
@@ -564,7 +807,6 @@
         </button>
       </div>
 
-      <!-- Add New Call Note Input -->
       <form onsubmit="submitNewActivity(event)" class="mb-4 space-y-2">
         <div class="flex gap-2">
           <select id="actType" class="bg-navy-900 border border-gold-500/30 rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none">
@@ -586,14 +828,11 @@
         </div>
       </form>
 
-      <!-- Timeline Scroll Container -->
-      <div id="activityList" class="flex-1 overflow-y-auto space-y-3 pr-1">
-        <!-- Dynamically injected via JS -->
-      </div>
+      <div id="activityList" class="flex-1 overflow-y-auto space-y-3 pr-1"></div>
     </div>
   </div>
 
-  <!-- Modal C: Site Visit Scheduler Modal (Feature 5) -->
+  <!-- Modal 4: Site Visit Scheduler Modal -->
   <div id="visitSchedulerModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
     <div class="glass-card max-w-md w-full rounded-2xl p-6 border border-emerald-500/40 shadow-2xl relative">
       <div class="flex items-center justify-between pb-3 border-b border-gold-500/20 mb-4">
@@ -624,7 +863,7 @@
           <div class="flex flex-col justify-end">
             <label class="flex items-center gap-2 py-2 cursor-pointer">
               <input type="checkbox" id="vPickup" class="rounded bg-navy-900 border-gold-500 text-gold-500 focus:ring-0">
-              <span class="text-xs text-gray-300">Saphale Station Pickup Needed</span>
+              <span class="text-xs text-gray-300">Saphale Station Pickup</span>
             </label>
           </div>
         </div>
@@ -637,7 +876,7 @@
     </div>
   </div>
 
-  <!-- Modal D: Change Password / Settings (Feature 7) -->
+  <!-- Modal 5: Change Password Modal -->
   <div id="passwordModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
     <div class="glass-card max-w-sm w-full rounded-2xl p-6 border border-gold-500/40 shadow-2xl relative">
       <div class="flex items-center justify-between pb-3 border-b border-gold-500/20 mb-4">
@@ -674,7 +913,7 @@
     </div>
   </div>
 
-  <!-- Modal E: Manual Lead Entry Modal -->
+  <!-- Modal 6: Manual Lead Entry Modal -->
   <div id="manualLeadModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
     <div class="glass-card max-w-lg w-full rounded-2xl p-6 border border-gold-500/40 shadow-2xl relative">
       <div class="flex items-center justify-between pb-3 border-b border-gold-500/20 mb-4">
@@ -755,11 +994,12 @@
   <script>
     let authToken = localStorage.getItem('rp_admin_token') || '';
     let currentInquiries = [];
+    let currentProperties = [];
+    let currentSiteContent = {};
     let searchTimeout = null;
     let selectedLeadForWa = null;
     let currentActiveLeadId = null;
 
-    // Filters state
     let filterState = {
       onlyVisits: false,
       onlyFollowups: false
@@ -796,8 +1036,46 @@
       document.getElementById('dashboardSection').classList.remove('hidden');
       loadStats();
       loadInquiries();
+      loadProperties();
+      loadSiteContent();
     }
 
+    // Tab Switching
+    function switchTab(tab) {
+      const tabLeads = document.getElementById('tabContentLeads');
+      const tabProps = document.getElementById('tabContentProperties');
+      const tabContent = document.getElementById('tabContentContent');
+
+      const btnLeads = document.getElementById('navTabLeads');
+      const btnProps = document.getElementById('navTabProperties');
+      const btnContent = document.getElementById('navTabContent');
+
+      const activeClass = 'px-3.5 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 bg-gold-500 text-navy-950 shadow';
+      const inactiveClass = 'px-3.5 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 text-gray-300 hover:text-white hover:bg-navy-800';
+
+      tabLeads.classList.add('hidden');
+      tabProps.classList.add('hidden');
+      tabContent.classList.add('hidden');
+
+      btnLeads.className = inactiveClass;
+      btnProps.className = inactiveClass;
+      btnContent.className = inactiveClass;
+
+      if (tab === 'leads') {
+        tabLeads.classList.remove('hidden');
+        btnLeads.className = activeClass;
+      } else if (tab === 'properties') {
+        tabProps.classList.remove('hidden');
+        btnProps.className = activeClass;
+        loadProperties();
+      } else if (tab === 'content') {
+        tabContent.classList.remove('hidden');
+        btnContent.className = activeClass;
+        loadSiteContent();
+      }
+    }
+
+    // Login
     async function handleLogin(e) {
       e.preventDefault();
       const username = document.getElementById('adminUsername').value;
@@ -840,6 +1118,448 @@
       showToast('Logged out successfully');
     }
 
+    // ---------------- PROPERTIES MANAGEMENT ---------------- //
+    async function loadProperties() {
+      if (!authToken) return;
+      try {
+        const res = await fetch('/api/admin/properties', {
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        if (res.status === 401) return handleLogout();
+        const data = await res.json();
+        if (data.success) {
+          currentProperties = data.properties || [];
+          renderProperties(currentProperties);
+        }
+      } catch (err) {
+        console.error('Failed to load properties', err);
+      }
+    }
+
+    function renderProperties(properties) {
+      const grid = document.getElementById('propertiesGrid');
+      grid.innerHTML = '';
+
+      if (properties.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full py-12 text-center glass-card rounded-2xl">
+            <i class="fa-solid fa-building text-3xl text-gold-400/40 mb-2"></i>
+            <p class="text-sm font-semibold text-gray-300">No properties added yet</p>
+            <p class="text-xs text-gray-500 mt-1">Click "Add New Property" to publish your first project.</p>
+          </div>
+        `;
+        return;
+      }
+
+      properties.forEach(prop => {
+        const card = document.createElement('div');
+        card.className = 'glass-card glass-card-hover rounded-2xl overflow-hidden flex flex-col border border-gold-500/25 transition';
+
+        const statusBadges = {
+          'Active': 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40',
+          'Upcoming': 'bg-blue-500/20 text-blue-300 border-blue-500/40',
+          'Sold Out': 'bg-red-500/20 text-red-300 border-red-500/40',
+          'Inactive': 'bg-gray-700/50 text-gray-400 border-gray-600'
+        };
+
+        card.innerHTML = `
+          <div class="h-44 w-full bg-navy-900 relative overflow-hidden">
+            <img src="${escapeHtml(prop.image_url || '/assets/images/vercel_hero_building.webp')}" alt="${escapeHtml(prop.title)}" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-gradient-to-t from-navy-950 via-transparent to-transparent"></div>
+            
+            <div class="absolute top-3 left-3 flex gap-1.5">
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold border backdrop-blur-md ${statusBadges[prop.status] || 'border-gray-600'}">
+                ${escapeHtml(prop.status)}
+              </span>
+              ${prop.featured ? '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-gold-500 text-navy-950 shadow">Featured</span>' : ''}
+            </div>
+
+            <div class="absolute bottom-2.5 left-3 right-3 flex items-baseline justify-between">
+              <div class="text-xs font-semibold text-gray-300 flex items-center gap-1">
+                <i class="fa-solid fa-location-dot text-gold-400 text-[10px]"></i>
+                <span class="truncate">${escapeHtml(prop.location)}</span>
+              </div>
+              <div class="text-sm font-bold text-gold-300">${escapeHtml(prop.starting_price)}</div>
+            </div>
+          </div>
+
+          <div class="p-4 flex-1 flex flex-col justify-between space-y-3">
+            <div>
+              <h3 class="font-bold text-base text-white">${escapeHtml(prop.title)}</h3>
+              <p class="text-xs text-gold-400/90 font-medium">${escapeHtml(prop.tagline || '')}</p>
+              
+              <div class="grid grid-cols-2 gap-2 mt-3 pt-3 border-t border-navy-800 text-[11px] text-gray-300">
+                <div>
+                  <span class="text-gray-500 block text-[10px]">Units:</span>
+                  <span class="font-semibold text-white">${escapeHtml(prop.unit_types || '1 & 2 BHK')}</span>
+                </div>
+                <div>
+                  <span class="text-gray-500 block text-[10px]">Possession:</span>
+                  <span class="font-semibold text-white">${escapeHtml(prop.possession || '-')}</span>
+                </div>
+              </div>
+
+              ${prop.rera_number ? `
+                <div class="mt-2 text-[10px] text-gray-400 truncate">
+                  <i class="fa-solid fa-certificate text-gold-400/80 mr-1"></i> ${escapeHtml(prop.rera_number)}
+                </div>
+              ` : ''}
+            </div>
+
+            <div class="pt-3 border-t border-navy-800 flex items-center justify-between gap-2">
+              <div class="flex items-center gap-2">
+                ${prop.brochure_url ? `
+                  <a href="${escapeHtml(prop.brochure_url)}" target="_blank" class="p-1.5 rounded-lg bg-navy-800 hover:bg-navy-700 text-gold-400 text-xs border border-gold-500/20" title="View Brochure">
+                    <i class="fa-solid fa-file-pdf"></i>
+                  </a>
+                ` : ''}
+                <button onclick="editProperty(${prop.id})" class="px-3 py-1.5 rounded-lg bg-navy-800 hover:bg-navy-700 text-gray-200 hover:text-white text-xs font-semibold border border-gold-500/20 flex items-center gap-1.5">
+                  <i class="fa-regular fa-pen-to-square text-xs text-blue-400"></i>
+                  <span>Edit</span>
+                </button>
+              </div>
+
+              <button onclick="deleteProperty(${prop.id})" class="p-1.5 rounded-lg text-gray-500 hover:text-red-400 hover:bg-red-950/40 transition" title="Remove Property">
+                <i class="fa-regular fa-trash-can text-xs"></i>
+              </button>
+            </div>
+          </div>
+        `;
+
+        grid.appendChild(card);
+      });
+    }
+
+    function openPropertyModal(isEdit = false) {
+      document.getElementById('propModalTitle').innerHTML = `
+        <i class="fa-solid fa-city text-gold-400"></i>
+        <span>${isEdit ? 'Edit Property / Project' : 'Add New Property / Project'}</span>
+      `;
+      if (!isEdit) {
+        document.getElementById('pId').value = '';
+        document.getElementById('pTitle').value = '';
+        document.getElementById('pTagline').value = '';
+        document.getElementById('pLocation').value = 'Saphale West, Palghar';
+        document.getElementById('pPrice').value = '₹24.99 Lakhs*';
+        document.getElementById('pUnits').value = '1 & 2 BHK';
+        document.getElementById('pCarpet').value = '425 - 680 Sq.Ft.';
+        document.getElementById('pPossession').value = 'Under Construction - Dec 2026';
+        document.getElementById('pRera').value = 'P99000054321 / MahaRERA Registered';
+        document.getElementById('pImage').value = '/assets/images/vercel_hero_building.webp';
+        document.getElementById('pBrochure').value = '/om-sunkulan-brochure.pdf';
+        document.getElementById('pDesc').value = '';
+        document.getElementById('pStatus').value = 'Active';
+        document.getElementById('pFeatured').checked = true;
+      }
+      document.getElementById('propertyModal').classList.remove('hidden');
+    }
+
+    function closePropertyModal() {
+      document.getElementById('propertyModal').classList.add('hidden');
+    }
+
+    function editProperty(id) {
+      const prop = currentProperties.find(p => p.id === id);
+      if (!prop) return;
+
+      document.getElementById('pId').value = prop.id;
+      document.getElementById('pTitle').value = prop.title || '';
+      document.getElementById('pTagline').value = prop.tagline || '';
+      document.getElementById('pLocation').value = prop.location || '';
+      document.getElementById('pPrice').value = prop.starting_price || '';
+      document.getElementById('pUnits').value = prop.unit_types || '';
+      document.getElementById('pCarpet').value = prop.carpet_area || '';
+      document.getElementById('pPossession').value = prop.possession || '';
+      document.getElementById('pRera').value = prop.rera_number || '';
+      document.getElementById('pImage').value = prop.image_url || '';
+      document.getElementById('pBrochure').value = prop.brochure_url || '';
+      document.getElementById('pDesc').value = prop.description || '';
+      document.getElementById('pStatus').value = prop.status || 'Active';
+      document.getElementById('pFeatured').checked = prop.featured ? true : false;
+
+      openPropertyModal(true);
+    }
+
+    async function handlePropertySubmit(e) {
+      e.preventDefault();
+      const id = document.getElementById('pId').value;
+      const title = document.getElementById('pTitle').value;
+      const tagline = document.getElementById('pTagline').value;
+      const location = document.getElementById('pLocation').value;
+      const starting_price = document.getElementById('pPrice').value;
+      const unit_types = document.getElementById('pUnits').value;
+      const carpet_area = document.getElementById('pCarpet').value;
+      const possession = document.getElementById('pPossession').value;
+      const rera_number = document.getElementById('pRera').value;
+      const image_url = document.getElementById('pImage').value;
+      const brochure_url = document.getElementById('pBrochure').value;
+      const description = document.getElementById('pDesc').value;
+      const status = document.getElementById('pStatus').value;
+      const featured = document.getElementById('pFeatured').checked ? 1 : 0;
+
+      const payload = {
+        title, tagline, location, starting_price, unit_types,
+        carpet_area, possession, rera_number, image_url, brochure_url,
+        description, status, featured
+      };
+
+      const method = id ? 'PUT' : 'POST';
+      const url = id ? `/api/admin/properties/${id}` : '/api/admin/properties';
+
+      try {
+        const res = await fetch(url, {
+          method: method,
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`
+          },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast(id ? 'Property updated successfully' : 'Property added successfully');
+          closePropertyModal();
+          loadProperties();
+          loadStats();
+        } else {
+          showToast(data.error || 'Failed to save property', true);
+        }
+      } catch (err) {
+        showToast('Server error saving property', true);
+      }
+    }
+
+    async function deleteProperty(id) {
+      if (!confirm('Are you sure you want to remove this property? It will no longer appear on the website.')) return;
+      try {
+        const res = await fetch(`/api/admin/properties/${id}`, {
+          method: 'DELETE',
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast('Property removed successfully');
+          loadProperties();
+          loadStats();
+        } else {
+          showToast(data.error || 'Failed to delete', true);
+        }
+      } catch (err) {
+        showToast('Error deleting property', true);
+      }
+    }
+
+    // ---------------- WEBSITE CONTENT CMS ---------------- //
+    async function loadSiteContent() {
+      try {
+        const res = await fetch('/api/site-content');
+        const data = await res.json();
+        if (data.success && data.content) {
+          currentSiteContent = data.content;
+          populateContentForm(data.content);
+        }
+      } catch (err) {
+        console.error('Failed to load site content', err);
+      }
+    }
+
+    function populateContentForm(c) {
+      // Hero & Announcement
+      if (c.hero) {
+        document.getElementById('scAnnouncementActive').checked = c.hero.announcementActive ? true : false;
+        document.getElementById('scAnnouncementText').value = c.hero.announcementText || '';
+        document.getElementById('scHeroHeadline').value = c.hero.headline || '';
+        document.getElementById('scHeroSubheadline').value = c.hero.subheadline || '';
+        document.getElementById('scHeroStartingPrice').value = c.hero.startingPrice || '';
+        document.getElementById('scHeroCtaPhone').value = c.hero.ctaPhone || '';
+      }
+
+      // Pricing
+      if (c.pricing) {
+        document.getElementById('scP1Name').value = c.pricing.unit1_name || '1 BHK Luxury Apartment';
+        document.getElementById('scP1Carpet').value = c.pricing.unit1_carpet || '425 - 460 Sq.Ft.';
+        document.getElementById('scP1Price').value = c.pricing.unit1_price || '₹24.99 Lakhs*';
+        document.getElementById('scP1Desc').value = c.pricing.unit1_desc || '';
+
+        document.getElementById('scP2Name').value = c.pricing.unit2_name || '2 BHK Premium Residence';
+        document.getElementById('scP2Carpet').value = c.pricing.unit2_carpet || '610 - 680 Sq.Ft.';
+        document.getElementById('scP2Price').value = c.pricing.unit2_price || '₹36.50 Lakhs*';
+        document.getElementById('scP2Desc').value = c.pricing.unit2_desc || '';
+
+        document.getElementById('scP3Name').value = c.pricing.unit3_name || 'Commercial Retail Shops';
+        document.getElementById('scP3Carpet').value = c.pricing.unit3_carpet || '180 - 450 Sq.Ft.';
+        document.getElementById('scP3Price').value = c.pricing.unit3_price || 'Price On Request';
+        document.getElementById('scP3Desc').value = c.pricing.unit3_desc || '';
+      }
+
+      // Contact
+      if (c.contact) {
+        document.getElementById('scContactAddress').value = c.contact.officeAddress || '';
+        document.getElementById('scContactPhone').value = c.contact.phone || '';
+        document.getElementById('scContactAltPhone').value = c.contact.alternatePhone || '';
+        document.getElementById('scContactEmail').value = c.contact.email || '';
+        document.getElementById('scContactHours').value = c.contact.officeHours || '';
+        document.getElementById('scContactRera').value = c.contact.reraNumber || '';
+      }
+
+      // Amenities
+      renderAmenitiesEditor(c.amenities || []);
+    }
+
+    function renderAmenitiesEditor(amenities) {
+      const container = document.getElementById('amenitiesEditorList');
+      container.innerHTML = '';
+      amenities.forEach((am, idx) => {
+        const div = document.createElement('div');
+        div.className = 'p-3 rounded-xl bg-navy-900 border border-gold-500/25 flex items-start gap-2.5 relative';
+        div.innerHTML = `
+          <div class="pt-1 text-gold-400">
+            <i class="fa-solid ${escapeHtml(am.icon || 'fa-check')}"></i>
+          </div>
+          <div class="flex-1 space-y-1">
+            <input type="text" value="${escapeHtml(am.name)}" placeholder="Amenity Name" class="am-name w-full px-2 py-1 rounded bg-navy-950 border border-gray-700 text-xs text-white font-bold">
+            <input type="text" value="${escapeHtml(am.desc || '')}" placeholder="Short description" class="am-desc w-full px-2 py-1 rounded bg-navy-950 border border-gray-700 text-[11px] text-gray-300">
+          </div>
+          <button onclick="removeAmenityItem(${idx})" class="text-gray-500 hover:text-red-400 p-1" title="Remove">
+            <i class="fa-regular fa-trash-can text-xs"></i>
+          </button>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function addAmenityItem() {
+      if (!currentSiteContent.amenities) currentSiteContent.amenities = [];
+      currentSiteContent.amenities.push({ name: 'New Amenity', desc: 'Description of facility', icon: 'fa-check' });
+      renderAmenitiesEditor(currentSiteContent.amenities);
+    }
+
+    function removeAmenityItem(idx) {
+      if (!currentSiteContent.amenities) return;
+      currentSiteContent.amenities.splice(idx, 1);
+      renderAmenitiesEditor(currentSiteContent.amenities);
+    }
+
+    async function saveHeroSection() {
+      const heroData = {
+        headline: document.getElementById('scHeroHeadline').value,
+        subheadline: document.getElementById('scHeroSubheadline').value,
+        startingPrice: document.getElementById('scHeroStartingPrice').value,
+        ctaPhone: document.getElementById('scHeroCtaPhone').value,
+        announcementActive: document.getElementById('scAnnouncementActive').checked,
+        announcementText: document.getElementById('scAnnouncementText').value
+      };
+
+      try {
+        const res = await fetch('/api/admin/site-content', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+          body: JSON.stringify({ section: 'hero', data: heroData })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast('Hero & Announcement section updated live!');
+        } else {
+          showToast('Failed to save', true);
+        }
+      } catch (err) {
+        showToast('Server error', true);
+      }
+    }
+
+    async function savePricingSection() {
+      const pricingData = {
+        unit1_name: document.getElementById('scP1Name').value,
+        unit1_carpet: document.getElementById('scP1Carpet').value,
+        unit1_price: document.getElementById('scP1Price').value,
+        unit1_desc: document.getElementById('scP1Desc').value,
+        unit2_name: document.getElementById('scP2Name').value,
+        unit2_carpet: document.getElementById('scP2Carpet').value,
+        unit2_price: document.getElementById('scP2Price').value,
+        unit2_desc: document.getElementById('scP2Desc').value,
+        unit3_name: document.getElementById('scP3Name').value,
+        unit3_carpet: document.getElementById('scP3Carpet').value,
+        unit3_price: document.getElementById('scP3Price').value,
+        unit3_desc: document.getElementById('scP3Desc').value
+      };
+
+      try {
+        const res = await fetch('/api/admin/site-content', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+          body: JSON.stringify({ section: 'pricing', data: pricingData })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast('Pricing configurations updated live!');
+        } else {
+          showToast('Failed to save', true);
+        }
+      } catch (err) {
+        showToast('Server error', true);
+      }
+    }
+
+    async function saveAmenitiesSection() {
+      const names = document.querySelectorAll('.am-name');
+      const descs = document.querySelectorAll('.am-desc');
+      const amenities = [];
+
+      names.forEach((el, i) => {
+        if (el.value.trim()) {
+          amenities.push({
+            name: el.value.trim(),
+            desc: descs[i] ? descs[i].value.trim() : '',
+            icon: 'fa-check'
+          });
+        }
+      });
+
+      try {
+        const res = await fetch('/api/admin/site-content', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+          body: JSON.stringify({ section: 'amenities', data: amenities })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast('Amenities list updated live!');
+        } else {
+          showToast('Failed to save', true);
+        }
+      } catch (err) {
+        showToast('Server error', true);
+      }
+    }
+
+    async function saveContactSection() {
+      const contactData = {
+        officeAddress: document.getElementById('scContactAddress').value,
+        phone: document.getElementById('scContactPhone').value,
+        alternatePhone: document.getElementById('scContactAltPhone').value,
+        email: document.getElementById('scContactEmail').value,
+        officeHours: document.getElementById('scContactHours').value,
+        reraNumber: document.getElementById('scContactRera').value
+      };
+
+      try {
+        const res = await fetch('/api/admin/site-content', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+          body: JSON.stringify({ section: 'contact', data: contactData })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast('Contact & Office details updated live!');
+        } else {
+          showToast('Failed to save', true);
+        }
+      } catch (err) {
+        showToast('Server error', true);
+      }
+    }
+
+    // ---------------- CRM LEADS & STATS ---------------- //
     async function loadStats() {
       if (!authToken) return;
       try {
@@ -855,7 +1575,6 @@
           document.getElementById('statContacted').textContent = data.stats.contacted || 0;
           document.getElementById('statTodayFollowups').textContent = data.stats.todayFollowups || 0;
 
-          // Follow-up alert banner
           const banner = document.getElementById('followupAlertBanner');
           const bannerCount = document.getElementById('bannerFollowupCount');
           if (data.stats.todayFollowups > 0) {
@@ -873,12 +1592,11 @@
     async function loadInquiries() {
       if (!authToken) return;
       const status = document.getElementById('statusFilter').value;
-      const unit = document.getElementById('unitFilter').value;
       const priority = document.getElementById('priorityFilter').value;
       const dateRange = document.getElementById('dateRangeFilter').value;
       const search = document.getElementById('searchInput').value;
 
-      let url = `/api/admin/inquiries?status=${encodeURIComponent(status)}&unit=${encodeURIComponent(unit)}&priority=${encodeURIComponent(priority)}&dateRange=${encodeURIComponent(dateRange)}`;
+      let url = `/api/admin/inquiries?status=${encodeURIComponent(status)}&priority=${encodeURIComponent(priority)}&dateRange=${encodeURIComponent(dateRange)}`;
       
       if (filterState.onlyVisits) url += '&onlyVisits=true';
       if (filterState.onlyFollowups) url += '&onlyFollowups=true';
@@ -931,19 +1649,16 @@
         const cleanPhone = (item.phone || '').replace(/\D/g, '');
         const callLink = `tel:+91${cleanPhone}`;
 
-        // Date formatting
         const dateObj = new Date(item.created_at);
         const dateStr = dateObj.toLocaleDateString('en-IN', { day: '2-digit', month: 'short' });
         const timeStr = dateObj.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
 
-        // Priority colors
         const priorityClasses = {
           'Hot': 'bg-red-500/20 text-red-300 border-red-500/40',
           'Warm': 'bg-amber-500/20 text-amber-300 border-amber-500/40',
           'Cold': 'bg-blue-500/20 text-blue-300 border-blue-500/40'
         };
 
-        // Status badge colors
         const statusColors = {
           'New': 'bg-gold-500/20 text-gold-300 border-gold-500/40',
           'Contacted': 'bg-blue-500/20 text-blue-300 border-blue-500/40',
@@ -952,7 +1667,6 @@
           'Closed': 'bg-gray-700/50 text-gray-400 border-gray-600'
         };
 
-        // Followup Due Check
         let followupBadge = '<span class="text-gray-500 text-[11px]">-</span>';
         if (item.followup_date) {
           const isOverdue = item.followup_date.slice(0, 10) <= todayStr && item.status !== 'Closed';
@@ -971,14 +1685,12 @@
           followupBadge = `
             <input 
               type="date" 
-              placeholder="Set date"
               onchange="updateFollowup(${item.id}, this.value)"
               class="bg-navy-900/60 border border-gray-800 hover:border-gray-600 rounded px-1.5 py-0.5 text-[11px] text-gray-400 focus:outline-none focus:text-white"
             >
           `;
         }
 
-        // Site Visit Cell
         let visitBadge = '';
         if (item.visit_date) {
           visitBadge = `
@@ -995,7 +1707,7 @@
         } else if (item.scheduleVisit) {
           visitBadge = `
             <button onclick="openVisitModal(${item.id}, '${escapeHtml(item.name)}')" class="px-2 py-1 rounded-md text-[10px] font-bold bg-emerald-600/30 hover:bg-emerald-600/50 text-emerald-300 border border-emerald-500/40 transition flex items-center gap-1">
-              <i class="fa-solid fa-clock"></i> Schedule Visit
+              <i class="fa-solid fa-clock"></i> Schedule
             </button>
           `;
         } else {
@@ -1007,7 +1719,6 @@
         }
 
         tr.innerHTML = `
-          <!-- Customer & Contact -->
           <td class="py-3 px-4 whitespace-nowrap">
             <div class="flex items-center gap-1.5">
               <span class="font-semibold text-white">${escapeHtml(item.name)}</span>
@@ -1022,7 +1733,6 @@
             <div class="text-[10px] text-gray-500 mt-0.5">${dateStr}, ${timeStr}</div>
           </td>
 
-          <!-- Unit & Priority -->
           <td class="py-3 px-4 whitespace-nowrap space-y-1">
             <span class="px-2 py-0.5 rounded text-[11px] font-bold bg-navy-800 border border-gold-500/30 text-gold-300 inline-block">
               ${escapeHtml(item.unit || '1 BHK')}
@@ -1039,17 +1749,9 @@
             </div>
           </td>
 
-          <!-- Next Follow-up (Feature 1) -->
-          <td class="py-3 px-4 whitespace-nowrap">
-            ${followupBadge}
-          </td>
+          <td class="py-3 px-4 whitespace-nowrap">${followupBadge}</td>
+          <td class="py-3 px-4 whitespace-nowrap">${visitBadge}</td>
 
-          <!-- Site Visit (Feature 5) -->
-          <td class="py-3 px-4 whitespace-nowrap">
-            ${visitBadge}
-          </td>
-
-          <!-- Status Dropdown -->
           <td class="py-3 px-4 whitespace-nowrap">
             <select 
               onchange="updateStatus(${item.id}, this.value)"
@@ -1063,7 +1765,6 @@
             </select>
           </td>
 
-          <!-- Quick WhatsApp (Feature 3) -->
           <td class="py-3 px-4 whitespace-nowrap">
             <button 
               onclick="openWaModal(${item.id})"
@@ -1074,7 +1775,6 @@
             </button>
           </td>
 
-          <!-- Activity Timeline (Feature 4) -->
           <td class="py-3 px-4 text-center whitespace-nowrap">
             <button 
               onclick="openActivityModal(${item.id}, '${escapeHtml(item.name)}')" 
@@ -1085,7 +1785,6 @@
             </button>
           </td>
 
-          <!-- Actions -->
           <td class="py-3 px-4 text-center whitespace-nowrap">
             <button 
               onclick="deleteInquiry(${item.id})" 
@@ -1101,7 +1800,7 @@
       });
     }
 
-    // ---------------- QUICK WHATSAPP TEMPLATES (Feature 3) ---------------- //
+    // WhatsApp Templates Modal
     function openWaModal(id) {
       const item = currentInquiries.find(i => i.id === id);
       if (!item) return;
@@ -1141,7 +1840,7 @@
       closeWaModal();
     }
 
-    // ---------------- ACTIVITY TIMELINE (Feature 4) ---------------- //
+    // Activity Timeline Modal
     async function openActivityModal(id, name) {
       currentActiveLeadId = id;
       document.getElementById('activityLeadName').textContent = `Customer: ${name}`;
@@ -1220,7 +1919,7 @@
       }
     }
 
-    // ---------------- SITE VISIT SCHEDULER (Feature 5) ---------------- //
+    // Site Visit Modal
     function openVisitModal(id, name) {
       currentActiveLeadId = id;
       document.getElementById('visitCustomerName').textContent = name;
@@ -1268,7 +1967,7 @@
       }
     }
 
-    // ---------------- SECURITY: CHANGE PASSWORD (Feature 7) ---------------- //
+    // Password Change Modal
     function openPasswordModal() {
       document.getElementById('passwordModal').classList.remove('hidden');
       document.getElementById('pwdError').classList.add('hidden');
@@ -1316,7 +2015,7 @@
       }
     }
 
-    // ---------------- FILTERS & UPDATES ---------------- //
+    // Filters
     function filterOnlyFollowups() {
       filterState.onlyFollowups = true;
       filterState.onlyVisits = false;
@@ -1342,7 +2041,6 @@
       filterState.onlyVisits = false;
       filterState.onlyFollowups = false;
       document.getElementById('statusFilter').value = 'All';
-      document.getElementById('unitFilter').value = 'All';
       document.getElementById('priorityFilter').value = 'All';
       document.getElementById('dateRangeFilter').value = 'All';
       document.getElementById('searchInput').value = '';
@@ -1465,7 +2163,6 @@
         });
         const data = await res.json();
         if (data.success) {
-          // Update priority & followup if set
           if (priority || followup_date) {
             await fetch(`/api/admin/inquiries/${data.id}`, {
               method: 'PATCH',
