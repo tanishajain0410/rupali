@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin CRM & Concierge - Rupali Properties</title>
+  <title>Admin Panel - Rupali Properties</title>
   <link rel="icon" href="/favicon.ico">
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -96,7 +96,7 @@
           <i class="fa-solid fa-building-shield text-2xl text-gold-400"></i>
         </div>
         <h1 class="text-2xl font-bold tracking-tight gold-gradient-text">RUPALI PROPERTIES</h1>
-        <p class="text-xs uppercase tracking-widest text-gold-300/80 mt-1 font-semibold">Sales CRM & Concierge Desk</p>
+        <p class="text-xs uppercase tracking-widest text-gold-300/80 mt-1 font-semibold">Admin Panel & Enquiries</p>
       </div>
 
       <form id="loginForm" onsubmit="handleLogin(event)" autocomplete="off" class="space-y-4">
@@ -110,7 +110,7 @@
             </span>
             <input 
               type="text" 
-              id="loginUsername" 
+              id="adminUsername" name="admin_username_field" autocomplete="off" 
               required 
               autocomplete="username"
               class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-navy-900/90 border border-gold-500/30 text-white text-sm focus:outline-none focus:border-gold-400 transition"
@@ -129,7 +129,7 @@
             </span>
             <input 
               type="password" 
-              id="loginPassword" 
+              id="adminPassword" name="admin_password_field" autocomplete="new-password" 
               required 
               autocomplete="current-password"
               class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-navy-900/90 border border-gold-500/30 text-white text-sm focus:outline-none focus:border-gold-400 transition"
@@ -145,7 +145,7 @@
           id="loginBtn"
           class="w-full mt-2 py-3 px-4 rounded-xl gold-gradient-bg text-navy-950 font-bold text-sm hover:opacity-95 active:scale-[0.99] transition shadow-lg flex items-center justify-center gap-2"
         >
-          <span>Sign In to CRM</span>
+          <span>Sign In to Admin Panel</span>
           <i class="fa-solid fa-arrow-right text-xs"></i>
         </button>
 
@@ -172,7 +172,7 @@
             <span class="font-bold text-sm tracking-wide gold-gradient-text">RUPALI PROPERTIES</span>
             <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 flex items-center gap-1">
               <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-              Live CRM
+              Live Admin
             </span>
           </div>
           <p class="text-[11px] text-gray-400">OM SUNKULAN Leads & Enquiries</p>
@@ -785,8 +785,8 @@
     function showLogin() {
       document.getElementById('loginSection').classList.remove('hidden');
       document.getElementById('dashboardSection').classList.add('hidden');
-      const u = document.getElementById('loginUsername');
-      const p = document.getElementById('loginPassword');
+      const u = document.getElementById('adminUsername');
+      const p = document.getElementById('adminPassword');
       if (u) u.value = '';
       if (p) p.value = '';
     }
@@ -800,8 +800,8 @@
 
     async function handleLogin(e) {
       e.preventDefault();
-      const username = document.getElementById('loginUsername').value;
-      const password = document.getElementById('loginPassword').value;
+      const username = document.getElementById('adminUsername').value;
+      const password = document.getElementById('adminPassword').value;
       const errorDiv = document.getElementById('loginError');
       const btn = document.getElementById('loginBtn');
 
@@ -829,7 +829,7 @@
         errorDiv.textContent = 'Server connection failed. Please try again.';
         errorDiv.classList.remove('hidden');
       } finally {
-        btn.innerHTML = `<span>Sign In to CRM</span> <i class="fa-solid fa-arrow-right text-xs"></i>`;
+        btn.innerHTML = `<span>Sign In to Admin Panel</span> <i class="fa-solid fa-arrow-right text-xs"></i>`;
       }
     }
 
