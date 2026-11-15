@@ -1,0 +1,1500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin CRM & Concierge - Rupali Properties</title>
+  <link rel="icon" href="/favicon.ico">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- FontAwesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            gold: {
+              300: '#F5CE68',
+              400: '#E5C058',
+              500: '#D4AF37',
+              600: '#B88E1B',
+              700: '#8A6A12',
+            },
+            navy: {
+              950: '#030712',
+              900: '#050B18',
+              850: '#071224',
+              800: '#0A1A33',
+              750: '#0F2342',
+              700: '#142C52',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #050B18;
+      color: #F3F4F6;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .gold-gradient-text {
+      background: linear-gradient(135deg, #FFF4D0 0%, #D4AF37 50%, #B88E1B 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .gold-gradient-bg {
+      background: linear-gradient(135deg, #D4AF37 0%, #B88E1B 100%);
+    }
+    .glass-card {
+      background: rgba(10, 26, 51, 0.72);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(212, 175, 55, 0.22);
+    }
+    .glass-card-hover:hover {
+      border-color: rgba(212, 175, 55, 0.45);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 0 15px rgba(212, 175, 55, 0.15);
+    }
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #050B18;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1F3354;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #D4AF37;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-gold-500 selection:text-navy-950">
+
+  <!-- ==================== 1. LOGIN VIEW ==================== -->
+  <div id="loginSection" class="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
+    <!-- Ambient Lighting -->
+    <div class="absolute top-1/4 -left-40 w-96 h-96 bg-gold-500/10 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute bottom-1/4 -right-40 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="w-full max-w-md glass-card rounded-2xl p-8 relative z-10 shadow-2xl border border-gold-500/35">
+      <div class="text-center mb-8">
+        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-navy-800 border border-gold-500/40 mb-4 shadow-lg">
+          <i class="fa-solid fa-building-shield text-2xl text-gold-400"></i>
+        </div>
+        <h1 class="text-2xl font-bold tracking-tight gold-gradient-text">RUPALI PROPERTIES</h1>
+        <p class="text-xs uppercase tracking-widest text-gold-300/80 mt-1 font-semibold">Sales CRM & Concierge Desk</p>
+      </div>
+
+      <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-1.5" for="loginUsername">
+            Username
+          </label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
+              <i class="fa-regular fa-user text-sm"></i>
+            </span>
+            <input 
+              type="text" 
+              id="loginUsername" 
+              required 
+              value="admin"
+              class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-navy-900/90 border border-gold-500/30 text-white text-sm focus:outline-none focus:border-gold-400 transition"
+              placeholder="Username"
+            >
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-1.5" for="loginPassword">
+            Password
+          </label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
+              <i class="fa-solid fa-lock text-sm"></i>
+            </span>
+            <input 
+              type="password" 
+              id="loginPassword" 
+              required 
+              value="RupaliAdmin@2026"
+              class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-navy-900/90 border border-gold-500/30 text-white text-sm focus:outline-none focus:border-gold-400 transition"
+              placeholder="••••••••••••"
+            >
+          </div>
+        </div>
+
+        <div id="loginError" class="hidden text-xs text-red-400 bg-red-950/40 border border-red-500/40 rounded-lg p-3"></div>
+
+        <button 
+          type="submit" 
+          id="loginBtn"
+          class="w-full mt-2 py-3 px-4 rounded-xl gold-gradient-bg text-navy-950 font-bold text-sm hover:opacity-95 active:scale-[0.99] transition shadow-lg flex items-center justify-center gap-2"
+        >
+          <span>Sign In to CRM</span>
+          <i class="fa-solid fa-arrow-right text-xs"></i>
+        </button>
+
+        <div class="pt-2 text-center">
+          <a href="/" class="text-xs text-gray-400 hover:text-gold-300 transition flex items-center justify-center gap-1.5">
+            <i class="fa-solid fa-arrow-left text-[10px]"></i>
+            <span>Back to Live Website</span>
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================== 2. MAIN DASHBOARD VIEW ==================== -->
+  <div id="dashboardSection" class="hidden min-h-screen flex flex-col">
+    <!-- Navbar -->
+    <header class="glass-card border-b border-gold-500/25 sticky top-0 z-40 px-4 sm:px-8 py-3.5 flex items-center justify-between">
+      <div class="flex items-center gap-3.5">
+        <div class="w-10 h-10 rounded-xl bg-navy-900 border border-gold-500/40 flex items-center justify-center text-gold-400 shadow">
+          <i class="fa-solid fa-building-shield"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-bold text-sm tracking-wide gold-gradient-text">RUPALI PROPERTIES</span>
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 flex items-center gap-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+              Live CRM
+            </span>
+          </div>
+          <p class="text-[11px] text-gray-400">OM SUNKULAN Leads & Enquiries</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 sm:gap-3">
+        <!-- Add Manual Lead Button -->
+        <button 
+          onclick="openManualModal()" 
+          class="px-3 sm:px-3.5 py-1.5 rounded-lg bg-navy-800 hover:bg-navy-700 border border-gold-500/30 text-gold-300 text-xs font-semibold flex items-center gap-1.5 transition shadow"
+        >
+          <i class="fa-solid fa-plus text-[11px]"></i>
+          <span class="hidden sm:inline">Add Lead</span>
+        </button>
+
+        <!-- Export CSV Button -->
+        <button 
+          onclick="exportCSV()" 
+          class="px-3 sm:px-3.5 py-1.5 rounded-lg bg-navy-800 hover:bg-navy-700 border border-gold-500/30 text-gray-200 text-xs font-semibold flex items-center gap-1.5 transition shadow"
+        >
+          <i class="fa-solid fa-file-excel text-emerald-400 text-xs"></i>
+          <span class="hidden sm:inline">Export CSV</span>
+        </button>
+
+        <!-- Change Password / Security Button -->
+        <button 
+          onclick="openPasswordModal()" 
+          class="p-2 sm:px-3 sm:py-1.5 rounded-lg bg-navy-800 hover:bg-navy-700 border border-gold-500/30 text-gray-300 hover:text-gold-300 text-xs font-semibold flex items-center gap-1.5 transition shadow"
+          title="Security & Password"
+        >
+          <i class="fa-solid fa-key text-xs"></i>
+          <span class="hidden md:inline">Password</span>
+        </button>
+
+        <!-- Website Link -->
+        <a 
+          href="/" 
+          target="_blank" 
+          class="p-2 rounded-lg bg-navy-800/80 hover:bg-navy-700 text-gray-300 hover:text-gold-300 transition border border-gold-500/20"
+          title="Open Website"
+        >
+          <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+        </a>
+
+        <!-- Logout Button -->
+        <button 
+          onclick="handleLogout()" 
+          class="px-3 py-1.5 rounded-lg bg-red-950/40 hover:bg-red-900/60 border border-red-500/30 text-red-300 text-xs font-semibold flex items-center gap-1.5 transition"
+        >
+          <i class="fa-solid fa-arrow-right-from-bracket text-[11px]"></i>
+          <span class="hidden sm:inline">Logout</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 space-y-6">
+
+      <!-- Today's Follow-up Alert Banner (Feature 1) -->
+      <div id="followupAlertBanner" class="hidden glass-card border-gold-500/50 rounded-2xl p-4 sm:px-6 sm:py-3.5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-gradient-to-r from-gold-500/15 via-navy-850 to-navy-900">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-gold-500/20 border border-gold-500/40 flex items-center justify-center text-gold-400">
+            <i class="fa-solid fa-bell text-lg animate-bounce"></i>
+          </div>
+          <div>
+            <h3 class="font-bold text-sm text-white flex items-center gap-2">
+              <span>Today's Follow-up Calls</span>
+              <span id="bannerFollowupCount" class="px-2 py-0.5 rounded-full text-xs font-bold bg-gold-500 text-navy-950">0</span>
+            </h3>
+            <p class="text-xs text-gray-300">You have leads scheduled for a call or check-in today.</p>
+          </div>
+        </div>
+        <button 
+          onclick="filterOnlyFollowups()" 
+          class="px-4 py-2 rounded-xl gold-gradient-bg text-navy-950 font-bold text-xs hover:opacity-95 shadow transition whitespace-nowrap"
+        >
+          View Pending Calls
+        </button>
+      </div>
+
+      <!-- Metrics Cards (Feature 6: Analytics) -->
+      <div class="grid grid-cols-2 lg:grid-cols-5 gap-3.5 sm:gap-4">
+        <!-- Total Leads -->
+        <div onclick="resetFilters()" class="glass-card glass-card-hover rounded-2xl p-4 sm:p-5 transition cursor-pointer">
+          <div class="flex items-center justify-between text-gray-400 mb-2">
+            <span class="text-xs font-semibold uppercase tracking-wider">Total Leads</span>
+            <div class="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center">
+              <i class="fa-solid fa-users text-xs"></i>
+            </div>
+          </div>
+          <div id="statTotal" class="text-2xl sm:text-3xl font-bold text-white tracking-tight">0</div>
+          <p class="text-[11px] text-gray-400 mt-1">All captured leads</p>
+        </div>
+
+        <!-- New Enquiries -->
+        <div onclick="filterByStatus('New')" class="glass-card glass-card-hover rounded-2xl p-4 sm:p-5 transition border-gold-500/40 cursor-pointer">
+          <div class="flex items-center justify-between text-gold-300 mb-2">
+            <span class="text-xs font-semibold uppercase tracking-wider">New Leads</span>
+            <div class="w-8 h-8 rounded-lg bg-gold-500/20 text-gold-400 flex items-center justify-center">
+              <i class="fa-solid fa-bolt text-xs"></i>
+            </div>
+          </div>
+          <div id="statNew" class="text-2xl sm:text-3xl font-bold gold-gradient-text tracking-tight">0</div>
+          <p class="text-[11px] text-gold-300/80 mt-1">Needs first call</p>
+        </div>
+
+        <!-- Today Follow-ups (Feature 1) -->
+        <div onclick="filterOnlyFollowups()" class="glass-card glass-card-hover rounded-2xl p-4 sm:p-5 transition cursor-pointer border-amber-500/40">
+          <div class="flex items-center justify-between text-amber-300 mb-2">
+            <span class="text-xs font-semibold uppercase tracking-wider">Due Followups</span>
+            <div class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-300 flex items-center justify-center">
+              <i class="fa-solid fa-phone-volume text-xs"></i>
+            </div>
+          </div>
+          <div id="statTodayFollowups" class="text-2xl sm:text-3xl font-bold text-amber-400 tracking-tight">0</div>
+          <p class="text-[11px] text-gray-400 mt-1">Scheduled for today</p>
+        </div>
+
+        <!-- Site Visits (Feature 5) -->
+        <div onclick="filterOnlyVisits()" class="glass-card glass-card-hover rounded-2xl p-4 sm:p-5 transition cursor-pointer border-emerald-500/30">
+          <div class="flex items-center justify-between text-emerald-400 mb-2">
+            <span class="text-xs font-semibold uppercase tracking-wider">Site Visits</span>
+            <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
+              <i class="fa-solid fa-car-side text-xs"></i>
+            </div>
+          </div>
+          <div id="statVisits" class="text-2xl sm:text-3xl font-bold text-emerald-400 tracking-tight">0</div>
+          <p class="text-[11px] text-gray-400 mt-1">Visit requested / booked</p>
+        </div>
+
+        <!-- Contacted / Progress -->
+        <div onclick="filterByStatus('Contacted')" class="glass-card glass-card-hover rounded-2xl p-4 sm:p-5 transition cursor-pointer">
+          <div class="flex items-center justify-between text-purple-400 mb-2">
+            <span class="text-xs font-semibold uppercase tracking-wider">Contacted</span>
+            <div class="w-8 h-8 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center">
+              <i class="fa-solid fa-headset text-xs"></i>
+            </div>
+          </div>
+          <div id="statContacted" class="text-2xl sm:text-3xl font-bold text-purple-400 tracking-tight">0</div>
+          <p class="text-[11px] text-gray-400 mt-1">In communication</p>
+        </div>
+      </div>
+
+      <!-- Filters & Search Toolbar (Features 5 & 6) -->
+      <div class="glass-card rounded-2xl p-4 flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3.5">
+        <!-- Search Box -->
+        <div class="relative flex-1">
+          <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
+            <i class="fa-solid fa-magnifying-glass text-xs"></i>
+          </span>
+          <input 
+            type="text" 
+            id="searchInput" 
+            oninput="handleSearch()"
+            placeholder="Search leads by name, phone, email, notes or requirements..." 
+            class="w-full pl-9 pr-4 py-2 rounded-xl bg-navy-900/90 border border-gold-500/25 text-xs sm:text-sm text-white focus:outline-none focus:border-gold-400 placeholder-gray-500 transition"
+          >
+        </div>
+
+        <!-- Filter Dropdowns -->
+        <div class="flex flex-wrap items-center gap-2 sm:gap-2.5">
+          <!-- Date Range Filter (Feature 6) -->
+          <div class="flex items-center gap-1.5 text-xs text-gray-300">
+            <i class="fa-regular fa-calendar text-gold-400 text-xs"></i>
+            <select 
+              id="dateRangeFilter" 
+              onchange="loadInquiries()" 
+              class="bg-navy-900 border border-gold-500/30 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-gold-400"
+            >
+              <option value="All">All Time</option>
+              <option value="Today">Today</option>
+              <option value="Yesterday">Yesterday</option>
+              <option value="This Week">Last 7 Days</option>
+              <option value="This Month">This Month</option>
+            </select>
+          </div>
+
+          <!-- Status Filter -->
+          <div class="flex items-center gap-1.5 text-xs text-gray-300">
+            <span>Status:</span>
+            <select 
+              id="statusFilter" 
+              onchange="loadInquiries()" 
+              class="bg-navy-900 border border-gold-500/30 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-gold-400"
+            >
+              <option value="All">All Statuses</option>
+              <option value="New">New</option>
+              <option value="Contacted">Contacted</option>
+              <option value="Site Visit Scheduled">Site Visit Scheduled</option>
+              <option value="Interested">Interested</option>
+              <option value="Closed">Closed</option>
+            </select>
+          </div>
+
+          <!-- Unit Filter -->
+          <div class="flex items-center gap-1.5 text-xs text-gray-300">
+            <span>Unit:</span>
+            <select 
+              id="unitFilter" 
+              onchange="loadInquiries()" 
+              class="bg-navy-900 border border-gold-500/30 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-gold-400"
+            >
+              <option value="All">All Units</option>
+              <option value="1 BHK">1 BHK</option>
+              <option value="2 BHK">2 BHK</option>
+              <option value="Commercial Shop">Commercial</option>
+              <option value="Penthouse">Penthouse</option>
+            </select>
+          </div>
+
+          <!-- Priority Filter -->
+          <div class="flex items-center gap-1.5 text-xs text-gray-300">
+            <span>Priority:</span>
+            <select 
+              id="priorityFilter" 
+              onchange="loadInquiries()" 
+              class="bg-navy-900 border border-gold-500/30 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-gold-400"
+            >
+              <option value="All">All Priority</option>
+              <option value="Hot">🔥 Hot</option>
+              <option value="Warm">☀️ Warm</option>
+              <option value="Cold">❄️ Cold</option>
+            </select>
+          </div>
+
+          <!-- Reset / Refresh Button -->
+          <button 
+            onclick="resetFilters()" 
+            class="p-2 rounded-lg bg-navy-800 hover:bg-navy-700 border border-gold-500/25 text-gray-300 hover:text-gold-300 transition"
+            title="Reset Filters"
+          >
+            <i class="fa-solid fa-arrows-rotate text-xs"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Inquiries Table Card -->
+      <div class="glass-card rounded-2xl overflow-hidden shadow-2xl border border-gold-500/30">
+        <div class="p-4 sm:px-6 sm:py-4 border-b border-gold-500/20 flex flex-wrap items-center justify-between gap-3">
+          <div class="flex items-center gap-3">
+            <h2 class="font-bold text-sm text-white flex items-center gap-2">
+              <span>Leads & Enquiries</span>
+              <span id="recordCount" class="text-xs px-2 py-0.5 rounded-full bg-navy-900 text-gold-400 border border-gold-500/30 font-semibold">0</span>
+            </h2>
+            <div id="activeFilterBadge" class="hidden text-[11px] px-2.5 py-0.5 rounded-full bg-gold-500/20 text-gold-300 border border-gold-500/40 font-medium"></div>
+          </div>
+          <div class="flex items-center gap-2 text-[11px] text-gray-400">
+            <span class="inline-flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-red-400"></span> Hot</span>
+            <span class="inline-flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-amber-400"></span> Warm</span>
+            <span class="inline-flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-blue-400"></span> Cold</span>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-navy-900/85 text-gray-400 uppercase tracking-wider text-[10px] border-b border-gold-500/20">
+              <tr>
+                <th class="py-3 px-4">Customer & Contact</th>
+                <th class="py-3 px-4">Unit & Priority</th>
+                <th class="py-3 px-4">Next Follow-up</th>
+                <th class="py-3 px-4">Site Visit</th>
+                <th class="py-3 px-4">Status</th>
+                <th class="py-3 px-4">Quick WhatsApp</th>
+                <th class="py-3 px-4 text-center">Activity Log</th>
+                <th class="py-3 px-4 text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="inquiriesTableBody" class="divide-y divide-navy-800">
+              <!-- Dynamically populated via JS -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="hidden py-16 text-center">
+          <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-navy-900 text-gold-400/50 mb-3 border border-gold-500/20">
+            <i class="fa-solid fa-inbox text-xl"></i>
+          </div>
+          <p class="text-sm font-semibold text-gray-300">No matching enquiries found</p>
+          <p class="text-xs text-gray-500 mt-1">Try resetting your search filters or check back later.</p>
+          <button onclick="resetFilters()" class="mt-3 px-3 py-1.5 rounded-lg bg-navy-800 text-xs text-gold-400 border border-gold-500/30">Reset Filters</button>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ==================== 3. MODALS ==================== -->
+
+  <!-- Modal A: Quick WhatsApp Templates (Feature 3) -->
+  <div id="waTemplateModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+    <div class="glass-card max-w-md w-full rounded-2xl p-6 border border-emerald-500/40 shadow-2xl relative">
+      <div class="flex items-center justify-between pb-3 border-b border-gold-500/20 mb-4">
+        <h3 class="font-bold text-sm text-white flex items-center gap-2">
+          <i class="fa-brands fa-whatsapp text-emerald-400 text-base"></i>
+          <span>Send WhatsApp Message</span>
+        </h3>
+        <button onclick="closeWaModal()" class="text-gray-400 hover:text-white transition">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <div class="mb-4">
+        <p class="text-xs text-gray-300">Recipient: <strong id="waCustomerName" class="text-white"></strong> (<span id="waCustomerPhone" class="font-mono text-emerald-400"></span>)</p>
+      </div>
+
+      <div class="space-y-2.5">
+        <!-- Template 1: Brochure & Pricing -->
+        <button 
+          onclick="sendTemplate('brochure')" 
+          class="w-full text-left p-3 rounded-xl bg-navy-900 hover:bg-navy-800 border border-gold-500/30 transition group flex items-start gap-3"
+        >
+          <div class="p-2 rounded-lg bg-emerald-500/10 text-emerald-400 group-hover:scale-105 transition">
+            <i class="fa-solid fa-file-pdf text-sm"></i>
+          </div>
+          <div>
+            <div class="text-xs font-bold text-white group-hover:text-gold-300 transition">1. Send Brochure & Price Details</div>
+            <div class="text-[11px] text-gray-400 mt-0.5">Sends PDF brochure link + starting price info for 1 & 2 BHK.</div>
+          </div>
+        </button>
+
+        <!-- Template 2: Site Location & Maps -->
+        <button 
+          onclick="sendTemplate('location')" 
+          class="w-full text-left p-3 rounded-xl bg-navy-900 hover:bg-navy-800 border border-gold-500/30 transition group flex items-start gap-3"
+        >
+          <div class="p-2 rounded-lg bg-blue-500/10 text-blue-400 group-hover:scale-105 transition">
+            <i class="fa-solid fa-location-dot text-sm"></i>
+          </div>
+          <div>
+            <div class="text-xs font-bold text-white group-hover:text-gold-300 transition">2. Send Site Location & Maps</div>
+            <div class="text-[11px] text-gray-400 mt-0.5">Sends Saphale West sales office address + Google Maps link.</div>
+          </div>
+        </button>
+
+        <!-- Template 3: Site Visit Confirmation -->
+        <button 
+          onclick="sendTemplate('visit')" 
+          class="w-full text-left p-3 rounded-xl bg-navy-900 hover:bg-navy-800 border border-gold-500/30 transition group flex items-start gap-3"
+        >
+          <div class="p-2 rounded-lg bg-amber-500/10 text-amber-400 group-hover:scale-105 transition">
+            <i class="fa-solid fa-calendar-check text-sm"></i>
+          </div>
+          <div>
+            <div class="text-xs font-bold text-white group-hover:text-gold-300 transition">3. Site Visit Confirmation</div>
+            <div class="text-[11px] text-gray-400 mt-0.5">Confirms date, sales executive contact and station pickup.</div>
+          </div>
+        </button>
+
+        <!-- Template 4: Friendly Follow-up Greeting -->
+        <button 
+          onclick="sendTemplate('greeting')" 
+          class="w-full text-left p-3 rounded-xl bg-navy-900 hover:bg-navy-800 border border-gold-500/30 transition group flex items-start gap-3"
+        >
+          <div class="p-2 rounded-lg bg-purple-500/10 text-purple-400 group-hover:scale-105 transition">
+            <i class="fa-solid fa-hand-peace text-sm"></i>
+          </div>
+          <div>
+            <div class="text-xs font-bold text-white group-hover:text-gold-300 transition">4. Follow-up Greeting</div>
+            <div class="text-[11px] text-gray-400 mt-0.5">Polite check-in asking if they reviewed details or have questions.</div>
+          </div>
+        </button>
+
+        <!-- Template 5: Direct Blank Chat -->
+        <button 
+          onclick="sendTemplate('blank')" 
+          class="w-full text-left p-2.5 rounded-xl bg-navy-950 hover:bg-navy-900 border border-gray-700 text-center text-xs text-gray-300 hover:text-white transition"
+        >
+          Open Blank WhatsApp Chat
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal B: Lead Activity Timeline & Call Notes (Feature 4) -->
+  <div id="activityModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm">
+    <div class="glass-card max-w-lg w-full rounded-2xl p-6 border border-gold-500/40 shadow-2xl flex flex-col max-h-[85vh]">
+      <div class="flex items-center justify-between pb-3 border-b border-gold-500/20 mb-3">
+        <div>
+          <h3 class="font-bold text-sm text-white flex items-center gap-2">
+            <i class="fa-solid fa-timeline text-gold-400"></i>
+            <span>Lead Activity & Call History</span>
+          </h3>
+          <p id="activityLeadName" class="text-xs text-gray-300 mt-0.5"></p>
+        </div>
+        <button onclick="closeActivityModal()" class="text-gray-400 hover:text-white transition">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <!-- Add New Call Note Input -->
+      <form onsubmit="submitNewActivity(event)" class="mb-4 space-y-2">
+        <div class="flex gap-2">
+          <select id="actType" class="bg-navy-900 border border-gold-500/30 rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none">
+            <option value="Call Note">📞 Call Note</option>
+            <option value="WhatsApp Sent">💬 WhatsApp</option>
+            <option value="Site Visit Note">🚗 Site Visit</option>
+            <option value="Internal Note">📝 Note</option>
+          </select>
+          <input 
+            type="text" 
+            id="actNoteText" 
+            required 
+            placeholder="Log call outcome, customer budget, discussion..."
+            class="flex-1 px-3 py-1.5 rounded-xl bg-navy-900 border border-gold-500/30 text-xs text-white focus:outline-none focus:border-gold-400"
+          >
+          <button type="submit" class="px-3 py-1.5 rounded-xl gold-gradient-bg text-navy-950 font-bold text-xs hover:opacity-90 transition">
+            Add
+          </button>
+        </div>
+      </form>
+
+      <!-- Timeline Scroll Container -->
+      <div id="activityList" class="flex-1 overflow-y-auto space-y-3 pr-1">
+        <!-- Dynamically injected via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal C: Site Visit Scheduler Modal (Feature 5) -->
+  <div id="visitSchedulerModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+    <div class="glass-card max-w-md w-full rounded-2xl p-6 border border-emerald-500/40 shadow-2xl relative">
+      <div class="flex items-center justify-between pb-3 border-b border-gold-500/20 mb-4">
+        <h3 class="font-bold text-sm text-white flex items-center gap-2">
+          <i class="fa-solid fa-car-side text-emerald-400"></i>
+          <span>Schedule Site Visit</span>
+        </h3>
+        <button onclick="closeVisitModal()" class="text-gray-400 hover:text-white transition">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <div class="mb-3">
+        <p class="text-xs text-gray-300">Customer: <strong id="visitCustomerName" class="text-white"></strong></p>
+      </div>
+
+      <form onsubmit="saveSiteVisit(event)" class="space-y-3.5">
+        <div>
+          <label class="block text-[11px] font-semibold text-gray-300 mb-1">Visit Date & Time *</label>
+          <input type="datetime-local" id="vDateTime" required class="w-full px-3 py-2 rounded-xl bg-navy-900 border border-gold-500/30 text-xs text-white focus:outline-none focus:border-gold-400">
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-[11px] font-semibold text-gray-300 mb-1">Number of Visitors</label>
+            <input type="number" id="vCount" min="1" max="10" value="2" class="w-full px-3 py-2 rounded-xl bg-navy-900 border border-gold-500/30 text-xs text-white focus:outline-none focus:border-gold-400">
+          </div>
+          <div class="flex flex-col justify-end">
+            <label class="flex items-center gap-2 py-2 cursor-pointer">
+              <input type="checkbox" id="vPickup" class="rounded bg-navy-900 border-gold-500 text-gold-500 focus:ring-0">
+              <span class="text-xs text-gray-300">Saphale Station Pickup Needed</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="pt-3 flex justify-end gap-2.5">
+          <button type="button" onclick="closeVisitModal()" class="px-4 py-2 rounded-lg bg-navy-800 text-xs text-gray-300 hover:text-white">Cancel</button>
+          <button type="submit" class="px-4 py-2 rounded-lg gold-gradient-bg text-navy-950 font-bold text-xs hover:opacity-95 shadow">Confirm & Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal D: Change Password / Settings (Feature 7) -->
+  <div id="passwordModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+    <div class="glass-card max-w-sm w-full rounded-2xl p-6 border border-gold-500/40 shadow-2xl relative">
+      <div class="flex items-center justify-between pb-3 border-b border-gold-500/20 mb-4">
+        <h3 class="font-bold text-sm text-white flex items-center gap-2">
+          <i class="fa-solid fa-lock text-gold-400"></i>
+          <span>Change Admin Password</span>
+        </h3>
+        <button onclick="closePasswordModal()" class="text-gray-400 hover:text-white transition">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <form onsubmit="handlePasswordChange(event)" class="space-y-3.5">
+        <div>
+          <label class="block text-[11px] font-semibold text-gray-300 mb-1">Current Password *</label>
+          <input type="password" id="currPwd" required class="w-full px-3 py-2 rounded-xl bg-navy-900 border border-gold-500/30 text-xs text-white focus:outline-none focus:border-gold-400">
+        </div>
+        <div>
+          <label class="block text-[11px] font-semibold text-gray-300 mb-1">New Password (min 6 chars) *</label>
+          <input type="password" id="newPwd" required minlength="6" class="w-full px-3 py-2 rounded-xl bg-navy-900 border border-gold-500/30 text-xs text-white focus:outline-none focus:border-gold-400">
+        </div>
+        <div>
+          <label class="block text-[11px] font-semibold text-gray-300 mb-1">Confirm New Password *</label>
+          <input type="password" id="confirmPwd" required minlength="6" class="w-full px-3 py-2 rounded-xl bg-navy-900 border border-gold-500/30 text-xs text-white focus:outline-none focus:border-gold-400">
+        </div>
+
+        <div id="pwdError" class="hidden text-xs text-red-400 bg-red-950/40 border border-red-500/40 rounded-lg p-2.5"></div>
+
+        <div class="pt-2 flex justify-end gap-2.5">
+          <button type="button" onclick="closePasswordModal()" class="px-4 py-2 rounded-lg bg-navy-800 text-xs text-gray-300 hover:text-white">Cancel</button>
+          <button type="submit" class="px-4 py-2 rounded-lg gold-gradient-bg text-navy-950 font-bold text-xs hover:opacity-95 shadow">Update Password</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal E: Manual Lead Entry Modal -->
+  <div id="manualLeadModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+    <div class="glass-card max-w-lg w-full rounded-2xl p-6 border border-gold-500/40 shadow-2xl relative">
+      <div class="flex items-center justify-between pb-3 border-b border-gold-500/20 mb-4">
+        <h3 class="font-bold text-sm text-white flex items-center gap-2">
+          <i class="fa-solid fa-user-plus text-gold-400"></i>
+          <span>Record Manual Lead / Walk-in</span>
+        </h3>
+        <button onclick="closeManualModal()" class="text-gray-400 hover:text-white transition">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <form onsubmit="submitManualLead(event)" class="space-y-3.5">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-[11px] font-semibold text-gray-300 mb-1">Customer Name *</label>
+            <input type="text" id="mName" required class="w-full px-3 py-2 rounded-lg bg-navy-900 border border-gold-500/30 text-xs text-white focus:outline-none focus:border-gold-400">
+          </div>
+          <div>
+            <label class="block text-[11px] font-semibold text-gray-300 mb-1">Mobile Number *</label>
+            <input type="tel" id="mPhone" required class="w-full px-3 py-2 rounded-lg bg-navy-900 border border-gold-500/30 text-xs text-white focus:outline-none focus:border-gold-400">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-[11px] font-semibold text-gray-300 mb-1">Email</label>
+            <input type="email" id="mEmail" class="w-full px-3 py-2 rounded-lg bg-navy-900 border border-gold-500/30 text-xs text-white focus:outline-none focus:border-gold-400">
+          </div>
+          <div>
+            <label class="block text-[11px] font-semibold text-gray-300 mb-1">Unit Interested In</label>
+            <select id="mUnit" class="w-full px-3 py-2 rounded-lg bg-navy-900 border border-gold-500/30 text-xs text-white focus:outline-none focus:border-gold-400">
+              <option value="1 BHK">1 BHK</option>
+              <option value="2 BHK">2 BHK</option>
+              <option value="Commercial Shop">Commercial Shop</option>
+              <option value="Penthouse">Penthouse</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-[11px] font-semibold text-gray-300 mb-1">Lead Priority</label>
+            <select id="mPriority" class="w-full px-3 py-2 rounded-lg bg-navy-900 border border-gold-500/30 text-xs text-white focus:outline-none focus:border-gold-400">
+              <option value="Hot">🔥 Hot Lead</option>
+              <option value="Warm" selected>☀️ Warm Lead</option>
+              <option value="Cold">❄️ Cold Lead</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[11px] font-semibold text-gray-300 mb-1">First Follow-up Date</label>
+            <input type="date" id="mFollowup" class="w-full px-3 py-2 rounded-lg bg-navy-900 border border-gold-500/30 text-xs text-white focus:outline-none focus:border-gold-400">
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2 pt-1">
+          <input type="checkbox" id="mVisit" class="rounded bg-navy-900 border-gold-500 text-gold-500 focus:ring-0">
+          <label for="mVisit" class="text-xs text-gray-300">Customer requested a Site Visit</label>
+        </div>
+
+        <div>
+          <label class="block text-[11px] font-semibold text-gray-300 mb-1">Discussion Notes / Budget</label>
+          <textarea id="mNotes" rows="2" placeholder="e.g. Budget 30-35 Lakhs, interested in 4th floor garden facing..." class="w-full px-3 py-2 rounded-lg bg-navy-900 border border-gold-500/30 text-xs text-white focus:outline-none focus:border-gold-400"></textarea>
+        </div>
+
+        <div class="pt-3 flex justify-end gap-2.5">
+          <button type="button" onclick="closeManualModal()" class="px-4 py-2 rounded-lg bg-navy-800 text-xs text-gray-300 hover:text-white">Cancel</button>
+          <button type="submit" class="px-4 py-2 rounded-lg gold-gradient-bg text-navy-950 font-bold text-xs hover:opacity-95 shadow">Save Lead</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none px-4 py-3 rounded-xl glass-card border border-gold-500/50 shadow-2xl flex items-center gap-2 text-xs font-semibold"></div>
+
+  <!-- ==================== 4. LOGIC JAVASCRIPT ==================== -->
+  <script>
+    let authToken = localStorage.getItem('rp_admin_token') || '';
+    let currentInquiries = [];
+    let searchTimeout = null;
+    let selectedLeadForWa = null;
+    let currentActiveLeadId = null;
+
+    // Filters state
+    let filterState = {
+      onlyVisits: false,
+      onlyFollowups: false
+    };
+
+    window.addEventListener('DOMContentLoaded', () => {
+      if (authToken) {
+        showDashboard();
+      } else {
+        showLogin();
+      }
+    });
+
+    function showToast(message, isError = false) {
+      const toast = document.getElementById('toast');
+      toast.innerHTML = `<i class="fa-solid ${isError ? 'fa-circle-xmark text-red-400' : 'fa-circle-check text-emerald-400'}"></i> <span>${message}</span>`;
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      setTimeout(() => {
+        toast.classList.add('translate-y-20', 'opacity-0');
+      }, 3000);
+    }
+
+    function showLogin() {
+      document.getElementById('loginSection').classList.remove('hidden');
+      document.getElementById('dashboardSection').classList.add('hidden');
+    }
+
+    function showDashboard() {
+      document.getElementById('loginSection').classList.add('hidden');
+      document.getElementById('dashboardSection').classList.remove('hidden');
+      loadStats();
+      loadInquiries();
+    }
+
+    async function handleLogin(e) {
+      e.preventDefault();
+      const username = document.getElementById('loginUsername').value;
+      const password = document.getElementById('loginPassword').value;
+      const errorDiv = document.getElementById('loginError');
+      const btn = document.getElementById('loginBtn');
+
+      errorDiv.classList.add('hidden');
+      btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin text-xs"></i> <span>Signing in...</span>`;
+
+      try {
+        const res = await fetch('/api/admin/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+        const data = await res.json();
+
+        if (data.success && data.token) {
+          authToken = data.token;
+          localStorage.setItem('rp_admin_token', authToken);
+          showDashboard();
+          showToast('Welcome back, Admin!');
+        } else {
+          errorDiv.textContent = data.error || 'Invalid credentials.';
+          errorDiv.classList.remove('hidden');
+        }
+      } catch (err) {
+        errorDiv.textContent = 'Server connection failed. Please try again.';
+        errorDiv.classList.remove('hidden');
+      } finally {
+        btn.innerHTML = `<span>Sign In to CRM</span> <i class="fa-solid fa-arrow-right text-xs"></i>`;
+      }
+    }
+
+    function handleLogout() {
+      authToken = '';
+      localStorage.removeItem('rp_admin_token');
+      showLogin();
+      showToast('Logged out successfully');
+    }
+
+    async function loadStats() {
+      if (!authToken) return;
+      try {
+        const res = await fetch('/api/admin/stats', {
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        if (res.status === 401) return handleLogout();
+        const data = await res.json();
+        if (data.success && data.stats) {
+          document.getElementById('statTotal').textContent = data.stats.total || 0;
+          document.getElementById('statNew').textContent = data.stats.new || 0;
+          document.getElementById('statVisits').textContent = data.stats.siteVisits || 0;
+          document.getElementById('statContacted').textContent = data.stats.contacted || 0;
+          document.getElementById('statTodayFollowups').textContent = data.stats.todayFollowups || 0;
+
+          // Follow-up alert banner
+          const banner = document.getElementById('followupAlertBanner');
+          const bannerCount = document.getElementById('bannerFollowupCount');
+          if (data.stats.todayFollowups > 0) {
+            bannerCount.textContent = data.stats.todayFollowups;
+            banner.classList.remove('hidden');
+          } else {
+            banner.classList.add('hidden');
+          }
+        }
+      } catch (err) {
+        console.error('Failed to load stats', err);
+      }
+    }
+
+    async function loadInquiries() {
+      if (!authToken) return;
+      const status = document.getElementById('statusFilter').value;
+      const unit = document.getElementById('unitFilter').value;
+      const priority = document.getElementById('priorityFilter').value;
+      const dateRange = document.getElementById('dateRangeFilter').value;
+      const search = document.getElementById('searchInput').value;
+
+      let url = `/api/admin/inquiries?status=${encodeURIComponent(status)}&unit=${encodeURIComponent(unit)}&priority=${encodeURIComponent(priority)}&dateRange=${encodeURIComponent(dateRange)}`;
+      
+      if (filterState.onlyVisits) url += '&onlyVisits=true';
+      if (filterState.onlyFollowups) url += '&onlyFollowups=true';
+      if (search) url += `&search=${encodeURIComponent(search)}`;
+
+      try {
+        const res = await fetch(url, {
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        if (res.status === 401) return handleLogout();
+        const data = await res.json();
+
+        if (data.success) {
+          currentInquiries = data.inquiries || [];
+          renderInquiries(currentInquiries);
+          loadStats();
+        }
+      } catch (err) {
+        console.error('Failed to load inquiries', err);
+      }
+    }
+
+    function handleSearch() {
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(() => {
+        loadInquiries();
+      }, 300);
+    }
+
+    function renderInquiries(inquiries) {
+      const tbody = document.getElementById('inquiriesTableBody');
+      const emptyState = document.getElementById('emptyState');
+      const recordCount = document.getElementById('recordCount');
+
+      recordCount.textContent = inquiries.length;
+      tbody.innerHTML = '';
+
+      if (inquiries.length === 0) {
+        emptyState.classList.remove('hidden');
+        return;
+      }
+      emptyState.classList.add('hidden');
+
+      const todayStr = new Date().toISOString().slice(0, 10);
+
+      inquiries.forEach(item => {
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-navy-900/60 transition group border-b border-navy-800/80';
+
+        const cleanPhone = (item.phone || '').replace(/\D/g, '');
+        const callLink = `tel:+91${cleanPhone}`;
+
+        // Date formatting
+        const dateObj = new Date(item.created_at);
+        const dateStr = dateObj.toLocaleDateString('en-IN', { day: '2-digit', month: 'short' });
+        const timeStr = dateObj.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
+
+        // Priority colors
+        const priorityClasses = {
+          'Hot': 'bg-red-500/20 text-red-300 border-red-500/40',
+          'Warm': 'bg-amber-500/20 text-amber-300 border-amber-500/40',
+          'Cold': 'bg-blue-500/20 text-blue-300 border-blue-500/40'
+        };
+
+        // Status badge colors
+        const statusColors = {
+          'New': 'bg-gold-500/20 text-gold-300 border-gold-500/40',
+          'Contacted': 'bg-blue-500/20 text-blue-300 border-blue-500/40',
+          'Site Visit Scheduled': 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40',
+          'Interested': 'bg-purple-500/20 text-purple-300 border-purple-500/40',
+          'Closed': 'bg-gray-700/50 text-gray-400 border-gray-600'
+        };
+
+        // Followup Due Check
+        let followupBadge = '<span class="text-gray-500 text-[11px]">-</span>';
+        if (item.followup_date) {
+          const isOverdue = item.followup_date.slice(0, 10) <= todayStr && item.status !== 'Closed';
+          followupBadge = `
+            <div class="flex items-center gap-1.5">
+              <input 
+                type="date" 
+                value="${item.followup_date.slice(0, 10)}" 
+                onchange="updateFollowup(${item.id}, this.value)"
+                class="bg-navy-900 border ${isOverdue ? 'border-amber-400 text-amber-300' : 'border-gray-700 text-gray-300'} rounded px-2 py-0.5 text-[11px] focus:outline-none"
+              >
+              ${isOverdue ? '<span class="px-1.5 py-0.5 rounded text-[9px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40">DUE</span>' : ''}
+            </div>
+          `;
+        } else {
+          followupBadge = `
+            <input 
+              type="date" 
+              placeholder="Set date"
+              onchange="updateFollowup(${item.id}, this.value)"
+              class="bg-navy-900/60 border border-gray-800 hover:border-gray-600 rounded px-1.5 py-0.5 text-[11px] text-gray-400 focus:outline-none focus:text-white"
+            >
+          `;
+        }
+
+        // Site Visit Cell
+        let visitBadge = '';
+        if (item.visit_date) {
+          visitBadge = `
+            <div class="space-y-1">
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 block w-fit">
+                <i class="fa-solid fa-calendar-check mr-1"></i>${item.visit_date.slice(0, 10)}
+              </span>
+              <div class="text-[10px] text-gray-400 flex items-center gap-2">
+                <span><i class="fa-solid fa-users text-[9px]"></i> ${item.visitor_count || 1}</span>
+                ${item.pickup_needed ? '<span class="text-gold-300 font-semibold"><i class="fa-solid fa-car text-[9px]"></i> Pickup</span>' : ''}
+              </div>
+            </div>
+          `;
+        } else if (item.scheduleVisit) {
+          visitBadge = `
+            <button onclick="openVisitModal(${item.id}, '${escapeHtml(item.name)}')" class="px-2 py-1 rounded-md text-[10px] font-bold bg-emerald-600/30 hover:bg-emerald-600/50 text-emerald-300 border border-emerald-500/40 transition flex items-center gap-1">
+              <i class="fa-solid fa-clock"></i> Schedule Visit
+            </button>
+          `;
+        } else {
+          visitBadge = `
+            <button onclick="openVisitModal(${item.id}, '${escapeHtml(item.name)}')" class="text-gray-500 hover:text-gold-300 text-[10px] flex items-center gap-1 transition">
+              <i class="fa-regular fa-calendar-plus"></i> Set
+            </button>
+          `;
+        }
+
+        tr.innerHTML = `
+          <!-- Customer & Contact -->
+          <td class="py-3 px-4 whitespace-nowrap">
+            <div class="flex items-center gap-1.5">
+              <span class="font-semibold text-white">${escapeHtml(item.name)}</span>
+              ${item.status === 'New' ? '<span class="w-1.5 h-1.5 rounded-full bg-gold-400 animate-pulse"></span>' : ''}
+            </div>
+            <div class="flex items-center gap-2 mt-0.5">
+              <span class="font-mono text-gray-300 text-[11px]">${escapeHtml(item.phone)}</span>
+              <a href="${callLink}" class="text-blue-400 hover:text-blue-300 text-[11px]" title="Direct Call">
+                <i class="fa-solid fa-phone"></i>
+              </a>
+            </div>
+            <div class="text-[10px] text-gray-500 mt-0.5">${dateStr}, ${timeStr}</div>
+          </td>
+
+          <!-- Unit & Priority -->
+          <td class="py-3 px-4 whitespace-nowrap space-y-1">
+            <span class="px-2 py-0.5 rounded text-[11px] font-bold bg-navy-800 border border-gold-500/30 text-gold-300 inline-block">
+              ${escapeHtml(item.unit || '1 BHK')}
+            </span>
+            <div>
+              <select 
+                onchange="updatePriority(${item.id}, this.value)"
+                class="text-[10px] font-bold rounded px-1.5 py-0.5 bg-navy-900 border focus:outline-none transition ${priorityClasses[item.priority] || 'border-gray-700'}"
+              >
+                <option value="Hot" ${item.priority === 'Hot' ? 'selected' : ''}>🔥 Hot</option>
+                <option value="Warm" ${item.priority === 'Warm' || !item.priority ? 'selected' : ''}>☀️ Warm</option>
+                <option value="Cold" ${item.priority === 'Cold' ? 'selected' : ''}>❄️ Cold</option>
+              </select>
+            </div>
+          </td>
+
+          <!-- Next Follow-up (Feature 1) -->
+          <td class="py-3 px-4 whitespace-nowrap">
+            ${followupBadge}
+          </td>
+
+          <!-- Site Visit (Feature 5) -->
+          <td class="py-3 px-4 whitespace-nowrap">
+            ${visitBadge}
+          </td>
+
+          <!-- Status Dropdown -->
+          <td class="py-3 px-4 whitespace-nowrap">
+            <select 
+              onchange="updateStatus(${item.id}, this.value)"
+              class="text-[11px] font-semibold rounded-lg px-2 py-1 bg-navy-900 border focus:outline-none transition ${statusColors[item.status] || 'border-gray-700'}"
+            >
+              <option value="New" ${item.status === 'New' ? 'selected' : ''}>New</option>
+              <option value="Contacted" ${item.status === 'Contacted' ? 'selected' : ''}>Contacted</option>
+              <option value="Site Visit Scheduled" ${item.status === 'Site Visit Scheduled' ? 'selected' : ''}>Site Visit</option>
+              <option value="Interested" ${item.status === 'Interested' ? 'selected' : ''}>Interested</option>
+              <option value="Closed" ${item.status === 'Closed' ? 'selected' : ''}>Closed</option>
+            </select>
+          </td>
+
+          <!-- Quick WhatsApp (Feature 3) -->
+          <td class="py-3 px-4 whitespace-nowrap">
+            <button 
+              onclick="openWaModal(${item.id})"
+              class="px-2.5 py-1 rounded-lg bg-emerald-600/30 hover:bg-emerald-600/50 text-emerald-300 border border-emerald-500/40 text-[11px] font-semibold flex items-center gap-1.5 transition"
+            >
+              <i class="fa-brands fa-whatsapp text-sm"></i>
+              <span>Templates</span>
+            </button>
+          </td>
+
+          <!-- Activity Timeline (Feature 4) -->
+          <td class="py-3 px-4 text-center whitespace-nowrap">
+            <button 
+              onclick="openActivityModal(${item.id}, '${escapeHtml(item.name)}')" 
+              class="p-1.5 rounded-lg bg-navy-800 hover:bg-navy-700 text-gold-300 border border-gold-500/25 text-xs transition"
+              title="View History / Add Note"
+            >
+              <i class="fa-solid fa-clipboard-list text-xs mr-1"></i> Log
+            </button>
+          </td>
+
+          <!-- Actions -->
+          <td class="py-3 px-4 text-center whitespace-nowrap">
+            <button 
+              onclick="deleteInquiry(${item.id})" 
+              class="p-1.5 rounded-lg text-gray-500 hover:text-red-400 hover:bg-red-950/40 transition" 
+              title="Delete Enquiry"
+            >
+              <i class="fa-regular fa-trash-can text-xs"></i>
+            </button>
+          </td>
+        `;
+
+        tbody.appendChild(tr);
+      });
+    }
+
+    // ---------------- QUICK WHATSAPP TEMPLATES (Feature 3) ---------------- //
+    function openWaModal(id) {
+      const item = currentInquiries.find(i => i.id === id);
+      if (!item) return;
+      selectedLeadForWa = item;
+      document.getElementById('waCustomerName').textContent = item.name;
+      document.getElementById('waCustomerPhone').textContent = item.phone;
+      document.getElementById('waTemplateModal').classList.remove('hidden');
+    }
+
+    function closeWaModal() {
+      document.getElementById('waTemplateModal').classList.add('hidden');
+      selectedLeadForWa = null;
+    }
+
+    function sendTemplate(type) {
+      if (!selectedLeadForWa) return;
+      const cleanPhone = (selectedLeadForWa.phone || '').replace(/\D/g, '');
+      const name = selectedLeadForWa.name || 'Sir/Madam';
+      const unit = selectedLeadForWa.unit || '1/2 BHK';
+
+      let text = '';
+
+      if (type === 'brochure') {
+        text = `Hello ${name} ji, greetings from Rupali Properties!%0A%0AHere are the complete details and brochure for *OM SUNKULAN* (Saphale West):%0A%0A📄 *Download Official Brochure:* https://rupaliproperties.com/om-sunkulan-brochure.pdf%0A%0A✨ *Project Highlights:*%0A• 1 & 2 BHK Luxury Residences%0A• High Quality Construction with Lift & CCTV%0A• Landscape Garden & Fitness Center%0A• Just minutes from Saphale Railway Station%0A%0APlease let us know if you would like to discuss unit floor plans and special launch offers!`;
+      } else if (type === 'location') {
+        text = `Hello ${name} ji,%0A%0AHere is the official site location for *OM SUNKULAN (Rupali Properties)*:%0A%0A📍 *Sales Office & Site:* Gala No. 106, 107 & 108, Krushna Plaza, Makane Village, Near Sai Samarth Super Market, Saphale West.%0A%0A🗺️ *Google Maps Link:* https://maps.google.com/?q=Saphale+West+Rupali+Properties%0A%0AWe look forward to welcoming you for a site inspection!`;
+      } else if (type === 'visit') {
+        const visitTime = selectedLeadForWa.visit_date ? selectedLeadForWa.visit_date : 'this upcoming weekend';
+        text = `Dear ${name} ji,%0A%0AYour site visit for *OM SUNKULAN* is scheduled for *${visitTime}*.%0A%0AOur sales executive will be pleased to show you our sample layout, amenities, and floor plans.%0A%0A🚗 Complimentary pickup from Saphale Railway Station is available upon arrival. For any assistance, you can call our sales desk directly at +91 95546 69474.`;
+      } else if (type === 'greeting') {
+        text = `Hello ${name} ji, hope you are having a wonderful day!%0A%0AWe received your enquiry regarding *${unit}* at *OM SUNKULAN*. We wanted to check if you had a chance to review the details or if you have any questions regarding pricing and bank loan approvals? We are here to help!`;
+      } else {
+        text = `Hello ${name} ji, thank you for reaching out to Rupali Properties regarding OM SUNKULAN. How can we assist you today?`;
+      }
+
+      window.open(`https://wa.me/91${cleanPhone}?text=${text}`, '_blank');
+      closeWaModal();
+    }
+
+    // ---------------- ACTIVITY TIMELINE (Feature 4) ---------------- //
+    async function openActivityModal(id, name) {
+      currentActiveLeadId = id;
+      document.getElementById('activityLeadName').textContent = `Customer: ${name}`;
+      document.getElementById('activityModal').classList.remove('hidden');
+      loadActivities(id);
+    }
+
+    function closeActivityModal() {
+      document.getElementById('activityModal').classList.add('hidden');
+      currentActiveLeadId = null;
+    }
+
+    async function loadActivities(id) {
+      const list = document.getElementById('activityList');
+      list.innerHTML = `<div class="text-center py-6 text-gray-500 text-xs"><i class="fa-solid fa-spinner fa-spin mr-1"></i> Loading history...</div>`;
+
+      try {
+        const res = await fetch(`/api/admin/inquiries/${id}/activity`, {
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        const data = await res.json();
+
+        if (data.success && data.activities) {
+          if (data.activities.length === 0) {
+            list.innerHTML = `<div class="text-center py-6 text-gray-500 text-xs">No activity logged yet. Add a note above!</div>`;
+            return;
+          }
+
+          list.innerHTML = data.activities.map(act => {
+            const d = new Date(act.created_at);
+            const dStr = d.toLocaleDateString('en-IN', { day: '2-digit', month: 'short' });
+            const tStr = d.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
+
+            return `
+              <div class="p-3 rounded-xl bg-navy-900/80 border border-gold-500/20 text-xs">
+                <div class="flex items-center justify-between text-[10px] text-gray-400 mb-1">
+                  <span class="font-bold text-gold-300 uppercase tracking-wider">${escapeHtml(act.action_type || 'Note')}</span>
+                  <span>${dStr}, ${tStr}</span>
+                </div>
+                <p class="text-gray-200 leading-relaxed">${escapeHtml(act.note)}</p>
+              </div>
+            `;
+          }).join('');
+        }
+      } catch (err) {
+        list.innerHTML = `<div class="text-center py-4 text-red-400 text-xs">Failed to load history</div>`;
+      }
+    }
+
+    async function submitNewActivity(e) {
+      e.preventDefault();
+      if (!currentActiveLeadId) return;
+
+      const actType = document.getElementById('actType').value;
+      const note = document.getElementById('actNoteText').value;
+
+      try {
+        const res = await fetch(`/api/admin/inquiries/${currentActiveLeadId}/activity`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`
+          },
+          body: JSON.stringify({ action_type: actType, note: note })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast('Note added to timeline');
+          document.getElementById('actNoteText').value = '';
+          loadActivities(currentActiveLeadId);
+        } else {
+          showToast(data.error || 'Failed to add note', true);
+        }
+      } catch (err) {
+        showToast('Error saving note', true);
+      }
+    }
+
+    // ---------------- SITE VISIT SCHEDULER (Feature 5) ---------------- //
+    function openVisitModal(id, name) {
+      currentActiveLeadId = id;
+      document.getElementById('visitCustomerName').textContent = name;
+      document.getElementById('visitSchedulerModal').classList.remove('hidden');
+    }
+
+    function closeVisitModal() {
+      document.getElementById('visitSchedulerModal').classList.add('hidden');
+      currentActiveLeadId = null;
+    }
+
+    async function saveSiteVisit(e) {
+      e.preventDefault();
+      if (!currentActiveLeadId) return;
+
+      const dt = document.getElementById('vDateTime').value;
+      const count = document.getElementById('vCount').value;
+      const pickup = document.getElementById('vPickup').checked;
+
+      try {
+        const res = await fetch(`/api/admin/inquiries/${currentActiveLeadId}`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`
+          },
+          body: JSON.stringify({
+            visit_date: dt,
+            visitor_count: count,
+            pickup_needed: pickup,
+            status: 'Site Visit Scheduled'
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast('Site Visit scheduled successfully!');
+          closeVisitModal();
+          loadInquiries();
+          loadStats();
+        } else {
+          showToast(data.error || 'Failed to schedule', true);
+        }
+      } catch (err) {
+        showToast('Error updating site visit', true);
+      }
+    }
+
+    // ---------------- SECURITY: CHANGE PASSWORD (Feature 7) ---------------- //
+    function openPasswordModal() {
+      document.getElementById('passwordModal').classList.remove('hidden');
+      document.getElementById('pwdError').classList.add('hidden');
+    }
+
+    function closePasswordModal() {
+      document.getElementById('passwordModal').classList.add('hidden');
+    }
+
+    async function handlePasswordChange(e) {
+      e.preventDefault();
+      const currentPassword = document.getElementById('currPwd').value;
+      const newPassword = document.getElementById('newPwd').value;
+      const confirmPassword = document.getElementById('confirmPwd').value;
+      const errDiv = document.getElementById('pwdError');
+
+      if (newPassword !== confirmPassword) {
+        errDiv.textContent = 'New passwords do not match.';
+        errDiv.classList.remove('hidden');
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/admin/change-password', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`
+          },
+          body: JSON.stringify({ currentPassword, newPassword })
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          showToast('Password changed successfully!');
+          closePasswordModal();
+          e.target.reset();
+        } else {
+          errDiv.textContent = data.error || 'Failed to change password.';
+          errDiv.classList.remove('hidden');
+        }
+      } catch (err) {
+        errDiv.textContent = 'Server error. Please try again.';
+        errDiv.classList.remove('hidden');
+      }
+    }
+
+    // ---------------- FILTERS & UPDATES ---------------- //
+    function filterOnlyFollowups() {
+      filterState.onlyFollowups = true;
+      filterState.onlyVisits = false;
+      document.getElementById('activeFilterBadge').textContent = "Filter: Due Follow-ups Today";
+      document.getElementById('activeFilterBadge').classList.remove('hidden');
+      loadInquiries();
+    }
+
+    function filterOnlyVisits() {
+      filterState.onlyVisits = true;
+      filterState.onlyFollowups = false;
+      document.getElementById('activeFilterBadge').textContent = "Filter: Site Visits Only";
+      document.getElementById('activeFilterBadge').classList.remove('hidden');
+      loadInquiries();
+    }
+
+    function filterByStatus(status) {
+      document.getElementById('statusFilter').value = status;
+      loadInquiries();
+    }
+
+    function resetFilters() {
+      filterState.onlyVisits = false;
+      filterState.onlyFollowups = false;
+      document.getElementById('statusFilter').value = 'All';
+      document.getElementById('unitFilter').value = 'All';
+      document.getElementById('priorityFilter').value = 'All';
+      document.getElementById('dateRangeFilter').value = 'All';
+      document.getElementById('searchInput').value = '';
+      document.getElementById('activeFilterBadge').classList.add('hidden');
+      loadInquiries();
+    }
+
+    async function updateStatus(id, newStatus) {
+      try {
+        const res = await fetch(`/api/admin/inquiries/${id}`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`
+          },
+          body: JSON.stringify({ status: newStatus })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast(`Status updated to ${newStatus}`);
+          loadStats();
+        } else {
+          showToast(data.error || 'Failed to update', true);
+        }
+      } catch (err) {
+        showToast('Error updating status', true);
+      }
+    }
+
+    async function updatePriority(id, newPriority) {
+      try {
+        const res = await fetch(`/api/admin/inquiries/${id}`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`
+          },
+          body: JSON.stringify({ priority: newPriority })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast(`Priority set to ${newPriority}`);
+        } else {
+          showToast('Failed to update priority', true);
+        }
+      } catch (err) {
+        showToast('Error updating priority', true);
+      }
+    }
+
+    async function updateFollowup(id, dateStr) {
+      try {
+        const res = await fetch(`/api/admin/inquiries/${id}`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`
+          },
+          body: JSON.stringify({ followup_date: dateStr })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast(`Follow-up set for ${dateStr}`);
+          loadStats();
+        }
+      } catch (err) {
+        showToast('Failed to set follow-up date', true);
+      }
+    }
+
+    async function deleteInquiry(id) {
+      if (!confirm('Are you sure you want to delete this enquiry? This action cannot be undone.')) return;
+      try {
+        const res = await fetch(`/api/admin/inquiries/${id}`, {
+          method: 'DELETE',
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast('Enquiry deleted');
+          loadInquiries();
+          loadStats();
+        }
+      } catch (err) {
+        showToast('Failed to delete', true);
+      }
+    }
+
+    function exportCSV() {
+      if (!authToken) return;
+      window.location.href = `/api/admin/export?token=${encodeURIComponent(authToken)}`;
+    }
+
+    function openManualModal() {
+      document.getElementById('manualLeadModal').classList.remove('hidden');
+    }
+
+    function closeManualModal() {
+      document.getElementById('manualLeadModal').classList.add('hidden');
+    }
+
+    async function submitManualLead(e) {
+      e.preventDefault();
+      const name = document.getElementById('mName').value;
+      const phone = document.getElementById('mPhone').value;
+      const email = document.getElementById('mEmail').value;
+      const unit = document.getElementById('mUnit').value;
+      const priority = document.getElementById('mPriority').value;
+      const followup_date = document.getElementById('mFollowup').value;
+      const scheduleVisit = document.getElementById('mVisit').checked;
+      const message = document.getElementById('mNotes').value;
+
+      try {
+        const res = await fetch('/api/inquiries', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name, phone, email, unit, scheduleVisit, message, contactMethod: 'Manual Entry'
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          // Update priority & followup if set
+          if (priority || followup_date) {
+            await fetch(`/api/admin/inquiries/${data.id}`, {
+              method: 'PATCH',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${authToken}`
+              },
+              body: JSON.stringify({ priority, followup_date })
+            });
+          }
+
+          showToast('Lead recorded successfully!');
+          closeManualModal();
+          e.target.reset();
+          loadInquiries();
+          loadStats();
+        } else {
+          showToast(data.error || 'Failed to save', true);
+        }
+      } catch (err) {
+        showToast('Error recording lead', true);
+      }
+    }
+
+    function escapeHtml(text) {
+      if (!text) return '';
+      return text.toString()
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+  </script>
+</body>
+</html>
